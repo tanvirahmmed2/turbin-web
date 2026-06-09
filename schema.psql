@@ -1,0 +1,651 @@
+-- ts_ preffix for tour saas and tour_ preffix for tenant websites --
+-- =====================================================
+-- TENANTS
+-- =====================================================
+
+CREATE TABLE ts_tenants (
+  tenant_id SERIAL PRIMARY KEY,
+
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+
+
+  status TEXT DEFAULT 'active'
+    CHECK (status IN ('active','suspended','deleted')),
+
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+
+CREATE TABLE tour_websites (
+  website_id SERIAL PRIMARY KEY,
+  tenant_id INT NOT NULL REFERENCES ts_tenants(tenant_id) ON DELETE CASCADE,
+  logo_url TEXT,
+  theme_color VARCHAR(50),
+  hero_title TEXT,
+  hero_subtitle TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT unique_tenant_website UNIQUE (tenant_id)
+);
+-- =====================================================
+-- DOMAINS
+-- =====================================================
+
+CREATE TABLE ts_domains (
+  domain_id SERIAL PRIMARY KEY,
+
+  tenant_id INT NOT NULL
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  domain TEXT UNIQUE NOT NULL,
+
+  is_primary BOOLEAN DEFAULT FALSE,
+  verified BOOLEAN DEFAULT FALSE,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- PACKAGES
+-- =====================================================
+
+CREATE TABLE ts_packages (
+  package_id SERIAL PRIMARY KEY,
+
+  name TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+
+  description TEXT,
+
+  monthly_price NUMERIC(10,2),
+  yearly_price NUMERIC(10,2),
+
+  max_tours INT,
+  max_bookings_per_month INT,
+  max_staff INT,
+
+  custom_domain BOOLEAN DEFAULT FALSE,
+  analytics BOOLEAN DEFAULT FALSE,
+
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE ts_package_features (
+  feature_id SERIAL PRIMARY KEY,
+
+  package_id INT
+    REFERENCES ts_packages(package_id)
+    ON DELETE CASCADE,
+
+  name TEXT NOT NULL,
+  value TEXT
+);
+
+-- =====================================================
+-- SUBSCRIPTIONS
+-- =====================================================
+
+CREATE TABLE ts_subscriptions (
+  subscription_id SERIAL PRIMARY KEY,
+
+  tenant_id INT
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  package_id INT
+    REFERENCES ts_packages(package_id),
+
+  status TEXT DEFAULT 'active'
+    CHECK (
+      status IN (
+        'trial',
+        'active',
+        'expired',
+        'cancelled'
+      )
+    ),
+
+  start_date TIMESTAMP DEFAULT now(),
+  end_date TIMESTAMP,
+
+  auto_renew BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- PURCHASES
+-- =====================================================
+
+CREATE TABLE ts_purchases (
+  purchase_id SERIAL PRIMARY KEY,
+
+  tenant_id INT
+    REFERENCES ts_tenants(tenant_id),
+
+  package_id INT
+    REFERENCES ts_packages(package_id),
+
+  amount NUMERIC(10,2) NOT NULL,
+
+  status TEXT DEFAULT 'pending'
+    CHECK (
+      status IN (
+        'pending',
+        'paid',
+        'failed',
+        'cancelled',
+        'refunded'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- INVOICES
+-- =====================================================
+
+CREATE TABLE ts_invoices (
+  invoice_id SERIAL PRIMARY KEY,
+
+  tenant_id INT REFERENCES ts_tenants(tenant_id),
+
+  subscription_id INT REFERENCES ts_subscriptions(subscription_id),
+
+  invoice_number TEXT UNIQUE NOT NULL,
+
+  amount NUMERIC(10,2) NOT NULL,
+
+  status TEXT DEFAULT 'unpaid'
+    CHECK (
+      status IN (
+        'unpaid',
+        'paid',
+        'overdue'
+      )
+    ),
+
+  due_date TIMESTAMP,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- SAAS PAYMENTS
+-- =====================================================
+
+CREATE TABLE ts_subscription_payments (
+  payment_id SERIAL PRIMARY KEY,
+
+  subscription_id INT
+    REFERENCES ts_subscriptions(subscription_id),
+
+  amount NUMERIC(10,2),
+
+  provider TEXT,
+  transaction_id TEXT UNIQUE,
+
+  status TEXT DEFAULT 'pending'
+    CHECK (
+      status IN (
+        'pending',
+        'success',
+        'failed',
+        'refunded'
+      )
+    ),
+
+  paid_at TIMESTAMP,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+
+
+-- =====================================================
+-- TOUR USERS
+-- =====================================================
+
+CREATE TABLE ts_users (
+  user_id SERIAL PRIMARY KEY,
+
+ 
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL,
+
+  role TEXT DEFAULT 'staff'
+    CHECK (
+      role IN (
+        'owner',
+        'manager',
+        'staff',
+        'guide',
+        'support',
+        'customer'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- TOURS
+-- =====================================================
+
+CREATE TABLE tour_tours (
+  tour_id SERIAL PRIMARY KEY,
+
+  tenant_id INT NOT NULL
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  title TEXT NOT NULL,
+  slug TEXT,
+
+  description TEXT,
+
+  location TEXT,
+
+  base_price NUMERIC(10,2),
+
+  status TEXT DEFAULT 'active'
+    CHECK (
+      status IN (
+        'draft',
+        'active',
+        'inactive'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- TOUR SCHEDULES
+-- =====================================================
+
+CREATE TABLE tour_schedules (
+  schedule_id SERIAL PRIMARY KEY,
+
+  tour_id INT
+    REFERENCES tour_tours(tour_id)
+    ON DELETE CASCADE,
+
+  tour_date DATE NOT NULL,
+
+  start_time TIME,
+  end_time TIME,
+
+  last_registration_date TIMESTAMP NOT NULL,
+
+  max_seats INT NOT NULL,
+
+  available_seats INT NOT NULL,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- ACTIVITIES
+-- =====================================================
+
+CREATE TABLE tour_activities (
+  activity_id SERIAL PRIMARY KEY,
+
+  tour_id INT
+    REFERENCES tour_tours(tour_id)
+    ON DELETE CASCADE,
+
+  title TEXT NOT NULL,
+
+  description TEXT,
+
+  day_number INT,
+
+  start_time TIME,
+  end_time TIME,
+
+  location TEXT
+);
+
+-- =====================================================
+-- CUSTOMERS
+-- =====================================================
+
+CREATE TABLE tour_users (
+  user_id SERIAL PRIMARY KEY,
+  
+  tenant_id INT NOT NULL
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  password TEXT NOT NULL,
+
+  role TEXT DEFAULT 'staff'
+    CHECK (
+      role IN (
+        'owner',
+        'manager',
+        'staff',
+        'guide',
+        'support',
+        'customer'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE tour_customers (
+  customer_id SERIAL PRIMARY KEY,
+  
+  tenant_id INT NOT NULL
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  
+  total_bookings INT DEFAULT 0,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- BOOKINGS
+-- =====================================================
+
+CREATE TABLE tour_bookings (
+  booking_id SERIAL PRIMARY KEY,
+
+  tenant_id INT REFERENCES ts_tenants(tenant_id),
+
+  customer_id INT
+    REFERENCES tour_customers(customer_id),
+
+  tour_id INT
+    REFERENCES tour_tours(tour_id),
+
+  schedule_id INT
+    REFERENCES tour_schedules(schedule_id),
+
+  seats INT NOT NULL,
+
+  total_price NUMERIC(10,2),
+
+  status TEXT DEFAULT 'pending'
+    CHECK (
+      status IN (
+        'pending',
+        'confirmed',
+        'cancelled'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- SEATS
+-- =====================================================
+
+CREATE TABLE tour_seats (
+  seat_id SERIAL PRIMARY KEY,
+
+  schedule_id INT
+    REFERENCES tour_schedules(schedule_id)
+    ON DELETE CASCADE,
+
+  seat_number TEXT,
+
+  status TEXT DEFAULT 'available'
+    CHECK (
+      status IN (
+        'available',
+        'reserved',
+        'booked'
+      )
+    ),
+
+  booking_id INT
+    REFERENCES tour_bookings(booking_id)
+);
+
+-- =====================================================
+-- PAYMENTS
+-- =====================================================
+
+CREATE TABLE tour_payments (
+  payment_id SERIAL PRIMARY KEY,
+
+  booking_id INT
+    REFERENCES tour_bookings(booking_id),
+
+  amount NUMERIC(10,2),
+
+  provider TEXT,
+
+  transaction_id TEXT UNIQUE,
+
+  status TEXT DEFAULT 'pending'
+    CHECK (
+      status IN (
+        'pending',
+        'success',
+        'failed',
+        'refunded'
+      )
+    ),
+
+  paid_at TIMESTAMP
+);
+
+-- =====================================================
+-- CONTACTS
+-- =====================================================
+
+CREATE TABLE tour_contacts (
+  contact_id SERIAL PRIMARY KEY,
+
+  tenant_id INT
+    REFERENCES ts_tenants(tenant_id),
+
+  name TEXT,
+  email TEXT,
+  phone TEXT,
+
+  subject TEXT,
+
+  message TEXT,
+
+  status TEXT DEFAULT 'unread'
+    CHECK (
+      status IN (
+        'unread',
+        'read',
+        'replied'
+      )
+    ),
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- REVIEWS
+-- =====================================================
+
+CREATE TABLE tour_reviews (
+  review_id SERIAL PRIMARY KEY,
+
+  customer_id INT
+    REFERENCES tour_customers(customer_id),
+
+  tour_id INT
+    REFERENCES tour_tours(tour_id),
+
+  rating INT CHECK (
+    rating BETWEEN 1 AND 5
+  ),
+
+  comment TEXT,
+
+  is_approved BOOLEAN DEFAULT FALSE,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+
+
+create table ts_reviews (
+  review_id SERIAL PRIMARY KEY,
+  user_id integer null,
+  rating integer null,
+  comment text null,
+  reply text null,
+  is_approved boolean null default false,
+  created_at timestamp without time zone null default now(),
+  constraint ts_reviews_pkey primary key (review_id),
+  constraint ts_reviews_user_id_key unique (user_id),
+  constraint ts_reviews_user_id_fkey foreign KEY (user_id) references ts_users (user_id) on delete CASCADE,
+  constraint ts_reviews_rating_check check (
+    (
+      (rating >= 1)
+      and (rating <= 5)
+    )
+  )
+) TABLESPACE pg_default;
+-- =====================================================
+-- ANALYTICS
+-- =====================================================
+
+CREATE TABLE tour_analytics (
+  analytics_id SERIAL PRIMARY KEY,
+
+  tenant_id INT REFERENCES ts_tenants(tenant_id),
+
+  event_type TEXT,
+
+  metadata JSONB,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- NOTIFICATIONS
+-- =====================================================
+
+CREATE TABLE tour_notifications (
+  notification_id SERIAL PRIMARY KEY,
+
+  tenant_id INT REFERENCES ts_tenants(tenant_id),
+
+  user_id INT REFERENCES tour_users(user_id),
+
+  title TEXT,
+  message TEXT,
+
+  is_read BOOLEAN DEFAULT FALSE,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- SUPPORT: SaaS Level (Tenants → SaaS Admins)
+-- =====================================================
+
+CREATE TABLE ts_support_tickets (
+  ticket_id SERIAL PRIMARY KEY,
+
+  tenant_id INT
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL,
+
+  priority TEXT DEFAULT 'normal'
+    CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
+
+  status TEXT DEFAULT 'open'
+    CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE ts_support_replies (
+  reply_id SERIAL PRIMARY KEY,
+
+  ticket_id INT NOT NULL
+    REFERENCES ts_support_tickets(ticket_id)
+    ON DELETE CASCADE,
+
+  user_id INT
+    REFERENCES ts_users(user_id)
+    ON DELETE SET NULL,
+
+  is_admin BOOLEAN DEFAULT FALSE,
+
+  message TEXT NOT NULL,
+
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- SUPPORT: Tenant Level (Customers → Tenant Staff)
+-- =====================================================
+
+CREATE TABLE tour_support_tickets (
+  ticket_id SERIAL PRIMARY KEY,
+
+  tenant_id INT NOT NULL
+    REFERENCES ts_tenants(tenant_id)
+    ON DELETE CASCADE,
+
+  customer_id INT
+    REFERENCES tour_customers(customer_id)
+    ON DELETE SET NULL,
+
+  customer_name TEXT NOT NULL,
+  customer_email TEXT NOT NULL,
+
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL,
+
+  priority TEXT DEFAULT 'normal'
+    CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
+
+  status TEXT DEFAULT 'open'
+    CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+CREATE TABLE tour_support_replies (
+  reply_id SERIAL PRIMARY KEY,
+
+  ticket_id INT NOT NULL
+    REFERENCES tour_support_tickets(ticket_id)
+    ON DELETE CASCADE,
+
+  staff_id INT
+    REFERENCES tour_users(user_id)
+    ON DELETE SET NULL,
+
+  is_staff BOOLEAN DEFAULT FALSE,
+
+  message TEXT NOT NULL,
+
+  created_at TIMESTAMP DEFAULT now()
+);
