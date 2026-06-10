@@ -9,11 +9,12 @@ CREATE TABLE ts_tenants (
   slug TEXT UNIQUE NOT NULL,
 
   status TEXT DEFAULT 'active'
-    CHECK (status IN ('active','suspended','deleted')),
+    CHECK (status IN ('active','development','suspended','deleted')),
 
   created_at TIMESTAMP DEFAULT now(),
   updated_at TIMESTAMP DEFAULT now()
 );
+
 
 
 CREATE TABLE tour_websites (
@@ -95,7 +96,7 @@ CREATE TABLE ts_subscriptions (
   package_id INT REFERENCES ts_packages(package_id),
 
   status TEXT DEFAULT 'active'
-    CHECK ('trial','active','expired','cancelled'),
+    CHECK (status IN ('trial','active','expired','cancelled')),
 
   start_date TIMESTAMP DEFAULT now(),
   end_date TIMESTAMP,
@@ -241,6 +242,12 @@ CREATE TABLE tour_users (
         'customer'
       )
     ),
+
+  is_verified BOOLEAN DEFAULT FALSE,
+  verification_token TEXT,
+  verification_token_expires TIMESTAMP,
+  reset_password_token TEXT,
+  reset_password_expires TIMESTAMP,
 
   created_at TIMESTAMP DEFAULT now()
 );

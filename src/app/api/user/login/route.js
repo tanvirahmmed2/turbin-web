@@ -31,6 +31,10 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
+    if (!user.is_verified) {
+      return NextResponse.json({ error: 'Please verify your account before logging in. Check your email for the verification link.' }, { status: 403 });
+    }
+
     const token = signToken({
       user_id: user.user_id,
       tenant_id: tenantId,

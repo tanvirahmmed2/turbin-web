@@ -1,6 +1,9 @@
 import CustomerSidebar from '@/components/ui/CustomerSidebar';
+import { requireRole } from '@/lib/auth';
 
-export default function CustomerPanelLayout({ children }) {
+export default async function CustomerPanelLayout({ children }) {
+  await requireRole(['customer']);
+
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-[#050505]">
       <CustomerSidebar />

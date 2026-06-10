@@ -20,11 +20,12 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      await axios.post('/api/user/register', formData);
+      const res = await axios.post('/api/user/register', formData);
 
-      toast.success('Registration successful!');
-      router.push('/panel'); // Redirect to customer panel
-      router.refresh();
+      toast.success(res.data.message || 'Registration successful! Please check your email to verify your account.', { duration: 5000 });
+      setFormData({ name: '', email: '', password: '' });
+      // Redirect to login instead of panel since they need to verify
+      router.push('/login');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Registration failed');
     } finally {

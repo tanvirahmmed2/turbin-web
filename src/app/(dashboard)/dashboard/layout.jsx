@@ -1,6 +1,9 @@
 import DashboardSidebar from '@/components/ui/DashboardSidebar';
+import { requireRole } from '@/lib/auth';
 
-export default function DashboardLayout({ children }) {
+export default async function DashboardLayout({ children }) {
+  await requireRole(['owner', 'manager', 'staff', 'guide', 'support']);
+
   return (
     <div className="flex min-h-screen bg-[#050505] text-white">
       <DashboardSidebar />

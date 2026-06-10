@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Navbar() {
+export default function Navbar({ session }) {
   const pathname = usePathname();
 
   const navLinks = [
@@ -22,18 +22,38 @@ export default function Navbar() {
           </span>
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Link 
-            href="/login" 
-            className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors mr-2"
-          >
-            Log in
-          </Link>
-          <Link 
-            href="/register" 
-            className="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
-          >
-            Sign up
-          </Link>
+          {session ? (
+            <>
+              <Link 
+                href={session.role === 'customer' ? '/panel' : '/dashboard'} 
+                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors mr-2"
+              >
+                {session.role === 'customer' ? 'Panel' : 'Dashboard'}
+              </Link>
+              {/* Note: Logout functionality should ideally clear the cookie, so we link to a logout route or execute a client action if it exists. For now we can link to /login which clears cookies in some setups, or /api/user/logout if built. Assuming /login is fine as a placeholder */}
+              <button 
+                onClick={() => { document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;'; window.location.href = '/login'; }}
+                className="text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link 
+                href="/login" 
+                className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors mr-2"
+              >
+                Log in
+              </Link>
+              <Link 
+                href="/register" 
+                className="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
+              >
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">

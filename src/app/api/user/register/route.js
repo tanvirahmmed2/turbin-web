@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { dbQuery } from '@/lib/db';
 import { getTenantId } from '@/lib/tenant';
-import { signToken } from '@/lib/auth';
+import { sendEmail } from '@/lib/mailer';
 
 export async function POST(req) {
   try {
@@ -25,45 +26,46 @@ export async function POST(req) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // Insert into tour_users
     const result = await dbQuery(
-      `INSERT INTO tour_users (tenant_id, name, email, password, role) 
-       VALUES ($1, $2, $3, $4, 'customer') RETURNING user_id, name, email, role`,
-      [tenantId, name, email, hashedPassword]
+      `INSERT INTO tour_users (tenant_id, name, email, password, role, verification_token, verification_token_expires) 
+       VALUES ($1, $2, $3, $4, 'customer', $5, $6) RETURNING user_id, name, email, role`,
+      [tenantId, name, email, hashedPassword, verificationToken, verificationExpires]
     );
 
     const user = result.rows[0];
 
     // Ensure customer record exists
-    const customerResult = await dbQuery(
+    await dbQuery(
       `INSERT INTO tour_customers (tenant_id, name, email) 
        VALUES ($1, $2, $3) 
        ON CONFLICT DO NOTHING RETURNING customer_id`,
       [tenantId, name, email]
     );
 
+    // Send Verification Email
+    const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;
+    const emailHtml = `
+      <h2>Verify your email address</h2>
+      <p>Hi ${name},</p>
+      <p>Thank you for registering. Please verify your email address by clicking the link below:</p>
+      <a href="${verificationUrl}" style="display:inline-block;padding:10px 20px;background:#3b82f6;color:white;text-decoration:none;border-radius:5px;">Verify Email</a>
+      <p>This link will expire in 24 hours.</p>
+    `;
 
-    // Generate token
-    const token = signToken({
-      user_id: user.user_id,
-      tenant_id: tenantId,
-      role: user.role,
-      email: user.email,
+    await sendEmail({
+      to: email,
+      subject: 'Verify your account',
+      htmlContent: emailHtml
     });
 
-    const response = NextResponse.json({ user });
-    
-    // Set cookie
-    response.cookies.set('auth_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 // 7 days
+    return NextResponse.json({ 
+      success: true, 
+      message: 'Registration successful! Please check your email to verify your account.' 
     });
-
-    return response;
   } catch (error) {
     console.error('Registration Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
