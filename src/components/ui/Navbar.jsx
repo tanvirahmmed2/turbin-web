@@ -3,11 +3,15 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAppContext } from '@/components/helper/Context';
 
 export default function Navbar({ session }) {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  
+  const { website } = useAppContext();
+  const brandName = website?.hero_title || 'TourApp';
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -33,8 +37,11 @@ export default function Navbar({ session }) {
     <nav className="fixed w-full z-50 top-0 start-0 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          {website?.logo_url && (
+            <img src={website.logo_url} alt={brandName} className="h-8 rounded-md" />
+          )}
           <span className="self-center text-2xl font-bold whitespace-nowrap text-gray-900 dark:text-white">
-            TourApp
+            {brandName}
           </span>
         </Link>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative" ref={dropdownRef}>

@@ -5,8 +5,9 @@ import { useAppContext } from '@/components/helper/Context';
 
 export default function Footer() {
   const { website } = useAppContext();
-  const brandName = website?.name || 'TourApp';
+  const brandName = website?.hero_title || 'TourApp';
   const themeColor = website?.theme_color || '#3b82f6';
+  const tagline = website?.tagline || website?.hero_subtitle || 'Discover breathtaking destinations and create unforgettable memories with our curated travel experiences.';
 
   return (
     <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 pt-16 pb-8 mt-auto">
@@ -16,12 +17,15 @@ export default function Footer() {
           {/* Brand & Newsletter Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-6">
+              {website?.logo_url && (
+                <img src={website.logo_url} alt={brandName} className="h-8 rounded-md" />
+              )}
               <span className="text-2xl font-black tracking-tight text-gray-900 dark:text-white">
                 {brandName}
               </span>
             </Link>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm">
-              Discover breathtaking destinations and create unforgettable memories with our curated travel experiences.
+              {tagline}
             </p>
 
           </div>
