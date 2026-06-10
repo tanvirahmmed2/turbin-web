@@ -30,7 +30,7 @@ export default function ManageBookings() {
         <p className="mt-1 text-gray-400">View and manage all customer bookings.</p>
       </div>
 
-      <div className="bg-[#111] rounded-3xl border border-[#222] overflow-hidden">
+      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
             <thead className="bg-[#1a1a1a]">

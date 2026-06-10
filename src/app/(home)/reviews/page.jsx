@@ -39,14 +39,14 @@ export default function ReviewsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center">
+      <main className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-24 pb-24">
+    <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-16">
@@ -61,7 +61,7 @@ export default function ReviewsPage() {
             {reviews.map(review => (
               <div 
                 key={review.review_id} 
-                className="bg-white dark:bg-[#0a0a0a] p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-lg relative overflow-hidden group"
+                className="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-lg relative overflow-hidden group"
               >
                 <div 
                   className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity"

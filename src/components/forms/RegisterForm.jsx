@@ -34,7 +34,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-xl shadow-xl">
+    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl shadow-xl">
       <div className="text-center">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Create an account</h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Join us to book your next adventure</p>

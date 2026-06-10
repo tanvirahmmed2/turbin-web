@@ -12,7 +12,7 @@ export default function Tour({ tour }) {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
         />
         
-        <div className="absolute top-4 right-4 z-20 bg-white/90 dark:bg-black/90 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700">
+        <div className="absolute top-4 right-4 z-20 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700">
           ${tour.base_price}
         </div>
       </div>

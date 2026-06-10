@@ -8,7 +8,7 @@ export default function CustomerSettings() {
         <p className="mt-1 text-gray-500">Manage your profile and account preferences.</p>
       </div>
 
-      <div className="bg-white dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm p-8">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm p-8">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Profile Information</h2>
         
         <form className="space-y-6">
@@ -36,7 +36,7 @@ export default function CustomerSettings() {
         </form>
       </div>
 
-      <div className="bg-white dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm p-8">
+      <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm p-8">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Security</h2>
         <form className="space-y-6 md:w-1/2">
           <div>

@@ -30,7 +30,7 @@ export default function TourDetailsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center">
+      <main className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </main>
     );
@@ -38,7 +38,7 @@ export default function TourDetailsPage() {
 
   if (error || !tour) {
     return (
-      <main className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center">
+      <main className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Tour not found</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-2">{error}</p>
@@ -48,7 +48,7 @@ export default function TourDetailsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-24 pb-24">
+    <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -104,7 +104,7 @@ export default function TourDetailsPage() {
                     <div className="bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white">Day {activity.day_number}: {activity.title}</h3>
-                        <span className="text-sm text-gray-500 bg-white dark:bg-black px-2 py-1 rounded-md border border-gray-200 dark:border-gray-800">
+                        <span className="text-sm text-gray-500 bg-white dark:bg-gray-900 px-2 py-1 rounded-md border border-gray-200 dark:border-gray-800">
                           {activity.start_time?.slice(0, 5)} - {activity.end_time?.slice(0, 5)}
                         </span>
                       </div>
@@ -133,7 +133,7 @@ export default function TourDetailsPage() {
                 {tour.schedules.map(schedule => {
                   const date = new Date(schedule.tour_date);
                   return (
-                    <div key={schedule.schedule_id} className="p-5 bg-white dark:bg-[#0a0a0a] rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col space-y-3">
+                    <div key={schedule.schedule_id} className="p-5 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 flex flex-col space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="font-semibold text-gray-900 dark:text-white">
                           {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}

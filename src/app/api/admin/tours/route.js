@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { dbQuery } from '@/lib/db';
+import { dbQuery, transaction } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
 export async function GET(req) {
@@ -11,11 +11,15 @@ export async function GET(req) {
 
     const tenantId = session.tenant_id;
 
+    // Fetch tours with spot counts
     const result = await dbQuery(
-      `SELECT tour_id, title, location, base_price, status, created_at 
-       FROM tour_tours 
-       WHERE tenant_id = $1 
-       ORDER BY created_at DESC`,
+      `SELECT t.tour_id, t.title, t.location, t.base_price, t.status, t.created_at, 
+              COUNT(ts.spot_id) as spots_count
+       FROM tour_tours t
+       LEFT JOIN tour_tour_spots ts ON t.tour_id = ts.tour_id
+       WHERE t.tenant_id = $1 
+       GROUP BY t.tour_id
+       ORDER BY t.created_at DESC`,
       [tenantId]
     );
 
@@ -35,15 +39,42 @@ export async function POST(req) {
 
     const tenantId = session.tenant_id;
     const body = await req.json();
-    const { title, description, location, base_price } = body;
+    const { title, description, location, base_price, spots = [] } = body;
 
-    const result = await dbQuery(
-      `INSERT INTO tour_tours (tenant_id, title, description, location, base_price) 
-       VALUES ($1, $2, $3, $4, $5) RETURNING tour_id`,
-      [tenantId, title, description, location, base_price]
-    );
+    const tourId = await transaction(async (client) => {
+      // 1. Insert tour
+      const tourResult = await client.query(
+        `INSERT INTO tour_tours (tenant_id, title, description, location, base_price) 
+         VALUES ($1, $2, $3, $4, $5) RETURNING tour_id`,
+        [tenantId, title, description, location, base_price]
+      );
+      const newTourId = tourResult.rows[0].tour_id;
 
-    return NextResponse.json({ success: true, tour_id: result.rows[0].tour_id });
+      // 2. Insert spots and link them
+      for (const spot of spots) {
+        let spotId = spot.spot_id;
+        
+        // If it's a new spot, insert it first
+        if (!spotId) {
+          const spotResult = await client.query(
+            `INSERT INTO tour_spots (tenant_id, name, description, location, image, image_id)
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING spot_id`,
+            [tenantId, spot.name, spot.description, spot.location, spot.image, spot.image_id]
+          );
+          spotId = spotResult.rows[0].spot_id;
+        }
+        
+        // Link spot to tour
+        await client.query(
+          `INSERT INTO tour_tour_spots (tour_id, spot_id) VALUES ($1, $2)`,
+          [newTourId, spotId]
+        );
+      }
+      
+      return newTourId;
+    });
+
+    return NextResponse.json({ success: true, tour_id: tourId });
   } catch (error) {
     console.error('Admin Create Tour Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

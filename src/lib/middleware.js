@@ -32,7 +32,7 @@ export async function isManager(req) {
         const { session, error } = await isLoggedIn(req);
         if (error) return { error };
 
-        if (!['owner', 'manager'].includes(session.role)) {
+        if (session.role !== 'manager') {
             return { error: NextResponse.json({ error: 'Forbidden. Manager access required.' }, { status: 403 }) };
         }
         return { session };
@@ -46,7 +46,7 @@ export async function isStaff(req) {
         const { session, error } = await isLoggedIn(req);
         if (error) return { error };
 
-        if (!['owner', 'manager', 'staff'].includes(session.role)) {
+        if (session.role !== 'staff') {
             return { error: NextResponse.json({ error: 'Forbidden. Staff access required.' }, { status: 403 }) };
         }
         return { session };
@@ -60,7 +60,7 @@ export async function isGuide(req) {
         const { session, error } = await isLoggedIn(req);
         if (error) return { error };
 
-        if (!['owner', 'manager', 'guide'].includes(session.role)) {
+        if (session.role !== 'guide') {
             return { error: NextResponse.json({ error: 'Forbidden. Guide access required.' }, { status: 403 }) };
         }
         return { session };
@@ -74,7 +74,7 @@ export async function isSupport(req) {
         const { session, error } = await isLoggedIn(req);
         if (error) return { error };
 
-        if (!['owner', 'manager', 'support'].includes(session.role)) {
+        if (session.role !== 'support') {
             return { error: NextResponse.json({ error: 'Forbidden. Support access required.' }, { status: 403 }) };
         }
         return { session };

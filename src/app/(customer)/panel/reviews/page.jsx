@@ -35,7 +35,7 @@ export default function CustomerReviews() {
       {reviews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {reviews.map(review => (
-            <div key={review.review_id} className="bg-white dark:bg-[#0a0a0a] p-6 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm relative">
+            <div key={review.review_id} className="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm relative">
               <div className="absolute top-6 right-6">
                  <span className={`px-2 py-1 text-xs font-semibold rounded-md ${review.is_approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                     {review.is_approved ? 'Approved' : 'Pending'}
@@ -55,7 +55,7 @@ export default function CustomerReviews() {
           ))}
         </div>
       ) : (
-        <div className="p-12 bg-white dark:bg-[#0a0a0a] rounded-3xl border border-gray-200 dark:border-gray-800 text-center">
+        <div className="p-12 bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 text-center">
           <p className="text-gray-500">You haven't left any reviews yet.</p>
         </div>
       )}

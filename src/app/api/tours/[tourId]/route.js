@@ -39,11 +39,21 @@ export async function GET(req, { params }) {
       [tourId]
     );
 
+    // Fetch spots
+    const spotsRes = await dbQuery(
+      `SELECT s.spot_id, s.name, s.description, s.location, s.image, s.image_id 
+       FROM tour_spots s
+       JOIN tour_tour_spots ts ON s.spot_id = ts.spot_id
+       WHERE ts.tour_id = $1`,
+      [tourId]
+    );
+
     return NextResponse.json({
       tour: {
         ...tour,
         activities: activitiesRes.rows,
         schedules: schedulesRes.rows,
+        spots: spotsRes.rows,
       }
     });
   } catch (error) {

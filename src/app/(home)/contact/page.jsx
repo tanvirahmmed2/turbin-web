@@ -7,7 +7,7 @@ export default function ContactPage() {
   const { website } = useAppContext();
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-24 pb-24">
+    <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-16">
@@ -69,7 +69,7 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-[#0a0a0a] p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-xl">
+            <div className="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-xl">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a message</h2>
               <ContactForm />
             </div>

@@ -33,25 +33,25 @@ export default function ManagerDashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-[#111] p-6 rounded-3xl border border-[#222] shadow-sm">
+        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
           <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Revenue</p>
           <p className="text-3xl font-bold text-white mt-2">${data?.metrics?.revenue || 0}</p>
         </div>
-        <div className="bg-[#111] p-6 rounded-3xl border border-[#222] shadow-sm">
+        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
           <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Bookings</p>
           <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.bookings || 0}</p>
         </div>
-        <div className="bg-[#111] p-6 rounded-3xl border border-[#222] shadow-sm">
+        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
           <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Customers</p>
           <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.customers || 0}</p>
         </div>
-        <div className="bg-[#111] p-6 rounded-3xl border border-[#222] shadow-sm">
+        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
           <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Active Tours</p>
           <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.active_tours || 0}</p>
         </div>
       </div>
 
-      <div className="bg-[#111] rounded-3xl border border-[#222] overflow-hidden">
+      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="p-6 border-b border-[#222] flex justify-between items-center">
           <h2 className="text-xl font-bold text-white">Recent Activity</h2>
         </div>

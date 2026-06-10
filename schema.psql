@@ -412,25 +412,6 @@ CREATE TABLE tour_reviews (
 );
 
 
-
-create table ts_reviews (
-  review_id SERIAL PRIMARY KEY,
-  user_id integer null,
-  rating integer null,
-  comment text null,
-  reply text null,
-  is_approved boolean null default false,
-  created_at timestamp without time zone null default now(),
-  constraint ts_reviews_pkey primary key (review_id),
-  constraint ts_reviews_user_id_key unique (user_id),
-  constraint ts_reviews_user_id_fkey foreign KEY (user_id) references ts_users (user_id) on delete CASCADE,
-  constraint ts_reviews_rating_check check (
-    (
-      (rating >= 1)
-      and (rating <= 5)
-    )
-  )
-) TABLESPACE pg_default;
 -- =====================================================
 -- ANALYTICS
 -- =====================================================
@@ -554,5 +535,31 @@ CREATE TABLE tour_support_replies (
 
   message TEXT NOT NULL,
 
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- SPOTS
+-- =====================================================
+
+CREATE TABLE tour_spots (
+  spot_id SERIAL PRIMARY KEY,
+  tenant_id INT REFERENCES ts_tenants(tenant_id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT,
+  location TEXT,
+  image TEXT,
+  image_id TEXT,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- TOUR SPOTS (Junction)
+-- =====================================================
+
+CREATE TABLE tour_tour_spots (
+  id SERIAL PRIMARY KEY,
+  tour_id INT REFERENCES tour_tours(tour_id) ON DELETE CASCADE,
+  spot_id INT REFERENCES tour_spots(spot_id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT now()
 );

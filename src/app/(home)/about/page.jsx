@@ -7,7 +7,7 @@ export default function AboutPage() {
   const { website } = useAppContext();
 
   return (
-    <main className="min-h-screen bg-white dark:bg-[#0a0a0a] pt-24 pb-24">
+    <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}

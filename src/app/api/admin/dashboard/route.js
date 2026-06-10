@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
 import { dbQuery } from '@/lib/db';
-import { isLoggedIn } from '@/lib/middleware';
+import { isManagement } from '@/lib/middleware';
 
 export async function GET(req) {
   try {
-    const { session, error } = await isLoggedIn(req);
+    const { session, error } = await isManagement(req);
     if (error) return error;
-    
-    if (!['owner', 'manager'].includes(session.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
     const tenantId = session.tenant_id;
 

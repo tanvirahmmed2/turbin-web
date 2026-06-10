@@ -37,7 +37,7 @@ export default function VerifyEmail() {
   }, [token]);
 
   return (
-    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-black/50 backdrop-blur-xl shadow-xl text-center">
+    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl shadow-xl text-center">
       <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Email Verification</h2>
       
       <div className="py-8">

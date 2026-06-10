@@ -13,7 +13,7 @@ export default async function AuthLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#050505]">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {children}
     </div>
   );

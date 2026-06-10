@@ -11,7 +11,7 @@ export default function Hero() {
   const { hero_title, hero_subtitle, theme_color } = website;
 
   return (
-    <div className="relative overflow-hidden bg-white dark:bg-[#0a0a0a] min-h-[80vh] flex items-center pt-16">
+    <div className="relative overflow-hidden bg-white dark:bg-gray-900 min-h-[80vh] flex items-center pt-16">
       {/* Dynamic Theme Color Background Blob */}
       <div 
         className="absolute top-0 right-0 w-[50vw] h-[50vw] rounded-full blur-[150px] opacity-20 pointer-events-none"
