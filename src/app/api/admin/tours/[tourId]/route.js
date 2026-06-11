@@ -13,7 +13,7 @@ export async function GET(req, { params }) {
     const { tourId } = params;
 
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, description, location, base_price, status 
+      `SELECT tour_id, title, description, starting_location, finish_location, base_price, status 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2`,
       [tourId, tenantId]
@@ -53,15 +53,15 @@ export async function PUT(req, { params }) {
     const tenantId = session.tenant_id;
     const { tourId } = params;
     const body = await req.json();
-    const { title, description, location, base_price, status, spots = [] } = body;
+    const { title, description, starting_location, finish_location, base_price, status, spots = [] } = body;
 
     await transaction(async (client) => {
       // 1. Update tour details
       await client.query(
         `UPDATE tour_tours 
-         SET title = $1, description = $2, location = $3, base_price = $4, status = COALESCE($5, status)
-         WHERE tour_id = $6 AND tenant_id = $7`,
-        [title, description, location, base_price, status, tourId, tenantId]
+         SET title = $1, description = $2, starting_location = $3, finish_location = $4, base_price = $5, status = COALESCE($6, status)
+         WHERE tour_id = $7 AND tenant_id = $8`,
+        [title, description, starting_location, finish_location, base_price, status, tourId, tenantId]
       );
 
       // 2. Sync spots: delete existing linkages

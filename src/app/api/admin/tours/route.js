@@ -13,7 +13,7 @@ export async function GET(req) {
 
     // Fetch tours with spot counts
     const result = await dbQuery(
-      `SELECT t.tour_id, t.title, t.location, t.base_price, t.status, t.created_at, 
+      `SELECT t.tour_id, t.title, t.starting_location, t.finish_location, t.base_price, t.status, t.created_at, 
               COUNT(ts.spot_id) as spots_count
        FROM tour_tours t
        LEFT JOIN tour_tour_spots ts ON t.tour_id = ts.tour_id
@@ -39,14 +39,14 @@ export async function POST(req) {
 
     const tenantId = session.tenant_id;
     const body = await req.json();
-    const { title, description, location, base_price, spots = [] } = body;
+    const { title, description, starting_location, finish_location, base_price, spots = [] } = body;
 
     const tourId = await transaction(async (client) => {
       // 1. Insert tour
       const tourResult = await client.query(
-        `INSERT INTO tour_tours (tenant_id, title, description, location, base_price) 
-         VALUES ($1, $2, $3, $4, $5) RETURNING tour_id`,
-        [tenantId, title, description, location, base_price]
+        `INSERT INTO tour_tours (tenant_id, title, description, starting_location, finish_location, base_price) 
+         VALUES ($1, $2, $3, $4, $5, $6) RETURNING tour_id`,
+        [tenantId, title, description, starting_location, finish_location, base_price]
       );
       const newTourId = tourResult.rows[0].tour_id;
 

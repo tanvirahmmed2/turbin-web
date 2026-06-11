@@ -19,66 +19,69 @@ const MenuBar = ({ editor }) => {
   const toggleOrderedList = (e) => { e.preventDefault(); editor.chain().focus().toggleOrderedList().run(); };
   const toggleBlockquote = (e) => { e.preventDefault(); editor.chain().focus().toggleBlockquote().run(); };
 
+  const activeClass = "bg-blue-100 text-blue-600";
+  const inactiveClass = "text-gray-600 hover:bg-gray-100 hover:text-gray-900";
+
   return (
     <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-200 rounded-t-xl bg-white">
       <button
         onClick={toggleBold}
-        className={`p-2 rounded transition-colors ${editor.isActive('bold') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bold') ? activeClass : inactiveClass}`}
         title="Bold"
       >
         <Bold size={16} />
       </button>
       <button
         onClick={toggleItalic}
-        className={`p-2 rounded transition-colors ${editor.isActive('italic') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('italic') ? activeClass : inactiveClass}`}
         title="Italic"
       >
         <Italic size={16} />
       </button>
       <button
         onClick={toggleStrike}
-        className={`p-2 rounded transition-colors ${editor.isActive('strike') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('strike') ? activeClass : inactiveClass}`}
         title="Strike"
       >
         <Strikethrough size={16} />
       </button>
 
-      <div className="w-px h-5 mx-1"></div>
+      <div className="w-px h-5 mx-1 bg-gray-200"></div>
 
       <button
         onClick={toggleH1}
-        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? activeClass : inactiveClass}`}
         title="Heading 1"
       >
         <Heading1 size={16} />
       </button>
       <button
         onClick={toggleH2}
-        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? activeClass : inactiveClass}`}
         title="Heading 2"
       >
         <Heading2 size={16} />
       </button>
 
-      <div className="w-px h-5 mx-1"></div>
+      <div className="w-px h-5 mx-1 bg-gray-200"></div>
 
       <button
         onClick={toggleBulletList}
-        className={`p-2 rounded transition-colors ${editor.isActive('bulletList') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bulletList') ? activeClass : inactiveClass}`}
         title="Bullet List"
       >
         <List size={16} />
       </button>
       <button
         onClick={toggleOrderedList}
-        className={`p-2 rounded transition-colors ${editor.isActive('orderedList') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('orderedList') ? activeClass : inactiveClass}`}
         title="Numbered List"
       >
         <ListOrdered size={16} />
       </button>
       <button
         onClick={toggleBlockquote}
-        className={`p-2 rounded transition-colors ${editor.isActive('blockquote') ? ' text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('blockquote') ? activeClass : inactiveClass}`}
         title="Quote"
       >
         <Quote size={16} />
@@ -101,9 +104,10 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write s
       }),
     ],
     content: value,
+    immediatelyRender: false,
     editorProps: {
       attributes: {
-        className: 'prose prose-sm sm:prose-base prose-invert prose-p:my-1 prose-headings:my-2 focus:outline-none min-h-[120px] max-w-none p-4  rounded-b-xl border border-t-0 border-gray-700 text-gray-200',
+        className: 'prose prose-sm sm:prose-base prose-p:my-1 prose-headings:my-2 focus:outline-none min-h-[120px] max-w-none p-4 rounded-b-xl border border-t-0 border-transparent text-gray-900 bg-white',
       },
     },
     onUpdate: ({ editor }) => {

@@ -152,7 +152,8 @@ CREATE TABLE tour_tours (
 
   description TEXT,
 
-  location TEXT,
+  starting_location TEXT,
+  finish_location TEXT,
 
   base_price NUMERIC(10,2),
 
