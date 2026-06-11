@@ -54,8 +54,14 @@ export default function TourDetailsPage() {
         {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
           <div className="space-y-6">
-            <div className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
-              {tour.location}
+            <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
+              <span>{tour.starting_location}</span>
+              {tour.finish_location && tour.finish_location !== tour.starting_location && (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                  <span>{tour.finish_location}</span>
+                </>
+              )}
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
               {tour.title}
@@ -69,9 +75,14 @@ export default function TourDetailsPage() {
                 <span className="text-3xl font-bold text-gray-900">
                   ${tour.base_price}
                 </span>
+                {tour.separate_room_available && (
+                  <div className="mt-2 text-sm font-medium text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded-md border border-blue-100">
+                    + ${tour.separate_room_charge} for Separate Room
+                  </div>
+                )}
               </div>
               <button 
-                className="px-8 py-4 rounded-xl text-gray-900 font-semibold transition-transform hover:scale-105 shadow-lg"
+                className="px-8 py-4 rounded-xl text-white font-semibold transition-transform hover:scale-105 shadow-lg"
                 style={{ backgroundColor: website?.theme_color || '#3b82f6', boxShadow: `0 10px 15px -3px ${website?.theme_color}40` }}
               >
                 Book Now
@@ -81,7 +92,7 @@ export default function TourDetailsPage() {
 
           <div className="h-[400px] w-full rounded-3xl overflow-hidden border border-gray-200 shadow-xl relative bg-white">
             <img 
-              src={`https://source.unsplash.com/random/800x600/?${encodeURIComponent(tour.location || 'travel')}`} 
+              src={`https://source.unsplash.com/random/800x600/?${encodeURIComponent(tour.finish_location || tour.starting_location || 'travel')}`} 
               alt={tour.title}
               className="w-full h-full object-cover"
             />
@@ -89,39 +100,23 @@ export default function TourDetailsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Itinerary */}
-          <div className="lg:col-span-2 space-y-8">
-            <h2 className="text-3xl font-bold text-gray-900">Itinerary</h2>
+          <div className="lg:col-span-2 space-y-12">
             
-            {tour.activities?.length > 0 ? (
+            {/* Features */}
+            {tour.features?.length > 0 && (
               <div className="space-y-6">
-                {tour.activities.map((activity, idx) => (
-                  <div key={activity.activity_id} className="relative pl-8 pb-8 border-l border-gray-200 last:border-0 last:pb-0">
-                    <div 
-                      className="absolute left-[-9px] top-0 w-4 h-4 rounded-full"
-                      style={{ backgroundColor: website?.theme_color || '#3b82f6' }}
-                    />
-                    <div className="rounded-2xl p-6 border border-gray-200 bg-white">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-xl font-bold text-gray-900">Day {activity.day_number}: {activity.title}</h3>
-                        <span className="text-sm text-gray-500 bg-white px-2 py-1 rounded-md border border-gray-200">
-                          {activity.start_time?.slice(0, 5)} - {activity.end_time?.slice(0, 5)}
-                        </span>
-                      </div>
-                      <p className="text-gray-600">{activity.description}</p>
-                      {activity.location && (
-                        <p className="text-sm font-medium text-gray-500 mt-4 flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                          {activity.location}
-                        </p>
-                      )}
+                <h2 className="text-3xl font-bold text-gray-900">Tour Features</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {tour.features.map(feature => (
+                    <div key={feature.feature_id} className="flex items-center space-x-3 text-gray-700">
+                      <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                      <span className="font-medium">{feature.name}</span>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            ) : (
-              <p className="text-gray-500">No itinerary details available.</p>
             )}
+
           </div>
 
           {/* Schedules */}

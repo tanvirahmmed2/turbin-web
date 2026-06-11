@@ -58,7 +58,7 @@ export default function ManageTours() {
             <thead className="">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tour Details</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Route</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Base Price</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
@@ -72,7 +72,10 @@ export default function ManageTours() {
                     <div className="text-xs text-gray-500 mt-1">ID: {tour.tour_id} • {tour.spots_count || 0} spots</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {tour.location}
+                    <span className="block">{tour.starting_location}</span>
+                    {tour.finish_location && tour.finish_location !== tour.starting_location && (
+                      <span className="block text-gray-400 text-xs mt-0.5">→ {tour.finish_location}</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${tour.base_price}

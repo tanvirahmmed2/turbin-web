@@ -13,7 +13,7 @@ export async function GET(req, { params }) {
     const { tourId } = params;
 
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, description, starting_location, finish_location, base_price, status 
+      `SELECT tour_id, title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2`,
       [tourId, tenantId]
@@ -31,10 +31,20 @@ export async function GET(req, { params }) {
       [tourId]
     );
 
+    const featuresRes = await dbQuery(
+      `SELECT f.feature_id, f.name 
+       FROM tour_features f
+       JOIN tour_tour_features tf ON f.feature_id = tf.feature_id
+       WHERE tf.tour_id = $1
+       ORDER BY f.feature_id ASC`,
+      [tourId]
+    );
+
     return NextResponse.json({ 
       tour: {
         ...tourRes.rows[0],
-        spots: spotsRes.rows
+        spots: spotsRes.rows,
+        features: featuresRes.rows
       }
     });
   } catch (error) {
@@ -53,15 +63,15 @@ export async function PUT(req, { params }) {
     const tenantId = session.tenant_id;
     const { tourId } = params;
     const body = await req.json();
-    const { title, description, starting_location, finish_location, base_price, status, spots = [] } = body;
+    const { title, description, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, status, spots = [], features = [] } = body;
 
     await transaction(async (client) => {
       // 1. Update tour details
       await client.query(
         `UPDATE tour_tours 
-         SET title = $1, description = $2, starting_location = $3, finish_location = $4, base_price = $5, status = COALESCE($6, status)
-         WHERE tour_id = $7 AND tenant_id = $8`,
-        [title, description, starting_location, finish_location, base_price, status, tourId, tenantId]
+         SET title = $1, description = $2, starting_location = $3, finish_location = $4, base_price = $5, separate_room_available = $6, separate_room_charge = $7, seat = $8, status = COALESCE($9, status)
+         WHERE tour_id = $10 AND tenant_id = $11`,
+        [title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, tourId, tenantId]
       );
 
       // 2. Sync spots: delete existing linkages
@@ -97,6 +107,23 @@ export async function PUT(req, { params }) {
           `INSERT INTO tour_tour_spots (tour_id, spot_id) VALUES ($1, $2)`,
           [tourId, spotId]
         );
+      }
+
+      // 4. Sync features: delete existing and insert new
+      await client.query(
+        `DELETE FROM tour_tour_features WHERE tour_id = $1`,
+        [tourId]
+      );
+
+      if (features && features.length > 0) {
+        for (const feature of features) {
+          if (feature.feature_id) {
+            await client.query(
+              `INSERT INTO tour_tour_features (tour_id, feature_id) VALUES ($1, $2)`,
+              [tourId, feature.feature_id]
+            );
+          }
+        }
       }
     });
 

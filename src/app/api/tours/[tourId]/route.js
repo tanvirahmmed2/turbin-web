@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
 
     // Fetch the main tour details
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, slug, description, starting_location, finish_location, base_price, status, created_at 
+      `SELECT tour_id, title, slug, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, created_at 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2 AND status = 'active'`,
       [tourId, tenantId]
@@ -21,14 +21,7 @@ export async function GET(req, { params }) {
 
     const tour = tourRes.rows[0];
 
-    // Fetch itinerary (activities)
-    const activitiesRes = await dbQuery(
-      `SELECT activity_id, title, description, day_number, start_time, end_time, location 
-       FROM tour_activities 
-       WHERE tour_id = $1 
-       ORDER BY day_number ASC, start_time ASC`,
-      [tourId]
-    );
+    // Fetch itinerary (activities) removed as requested.
 
     // Fetch upcoming schedules
     const schedulesRes = await dbQuery(
@@ -48,12 +41,22 @@ export async function GET(req, { params }) {
       [tourId]
     );
 
+    // Fetch features
+    const featuresRes = await dbQuery(
+      `SELECT f.feature_id, f.name 
+       FROM tour_features f
+       JOIN tour_tour_features tf ON f.feature_id = tf.feature_id
+       WHERE tf.tour_id = $1
+       ORDER BY f.feature_id ASC`,
+      [tourId]
+    );
+
     return NextResponse.json({
       tour: {
         ...tour,
-        activities: activitiesRes.rows,
         schedules: schedulesRes.rows,
         spots: spotsRes.rows,
+        features: featuresRes.rows,
       }
     });
   } catch (error) {

@@ -156,6 +156,9 @@ CREATE TABLE tour_tours (
   finish_location TEXT,
 
   base_price NUMERIC(10,2),
+  separate_room_available BOOLEAN DEFAULT false,
+  separate_room_charge NUMERIC(10,2) DEFAULT 0.00,
+  seat INT DEFAULT 0,
 
   status TEXT DEFAULT 'active'
     CHECK (
@@ -562,5 +565,27 @@ CREATE TABLE tour_tour_spots (
   id SERIAL PRIMARY KEY,
   tour_id INT REFERENCES tour_tours(tour_id) ON DELETE CASCADE,
   spot_id INT REFERENCES tour_spots(spot_id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- TOUR FEATURES
+-- =====================================================
+
+CREATE TABLE tour_features (
+  feature_id SERIAL PRIMARY KEY,
+  tenant_id INT REFERENCES ts_tenants(tenant_id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- =====================================================
+-- TOUR FEATURES (Junction)
+-- =====================================================
+
+CREATE TABLE tour_tour_features (
+  id SERIAL PRIMARY KEY,
+  tour_id INT REFERENCES tour_tours(tour_id) ON DELETE CASCADE,
+  feature_id INT REFERENCES tour_features(feature_id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT now()
 );
