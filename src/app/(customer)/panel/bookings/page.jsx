@@ -21,19 +21,19 @@ export default function CustomerBookings() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="animate-pulse w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>;
+  if (loading) return <div className="animate-pulse w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin bg-white"></div>;
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Bookings</h1>
+        <h1 className="text-3xl font-bold text-gray-900">My Bookings</h1>
         <p className="mt-1 text-gray-500">View and manage all your past and upcoming tour bookings.</p>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead className="bg-gray-50 dark:bg-gray-900/50">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tour</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
@@ -42,27 +42,24 @@ export default function CustomerBookings() {
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            <tbody className="divide-y divide-gray-200">
               {bookings.length > 0 ? bookings.map((booking) => (
-                <tr key={booking.booking_id} className="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <tr key={booking.booking_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900 dark:text-white">{booking.title}</div>
+                    <div className="text-sm font-bold text-gray-900">{booking.title}</div>
                     <div className="text-xs text-gray-500 mt-1">Booked: {new Date(booking.created_at).toLocaleDateString()}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {new Date(booking.tour_date).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {booking.seats}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${booking.total_price}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' : 
-                        booking.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
-                        'bg-yellow-100 text-yellow-800'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' : booking.status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>
                       {booking.status}
                     </span>
                   </td>

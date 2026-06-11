@@ -21,13 +21,13 @@ export default function CustomerSupports() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="animate-pulse w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>;
+  if (loading) return <div className="animate-pulse w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin bg-white"></div>;
 
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Support Tickets</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Support Tickets</h1>
           <p className="mt-1 text-gray-500">Need help? Manage your support requests here.</p>
         </div>
         <button className="px-6 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
@@ -35,10 +35,10 @@ export default function CustomerSupports() {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-            <thead className="bg-gray-50 dark:bg-gray-900/50">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Ticket #</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Subject</th>
@@ -47,28 +47,22 @@ export default function CustomerSupports() {
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Last Updated</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            <tbody className="divide-y divide-gray-200">
               {tickets.length > 0 ? tickets.map((ticket) => (
-                <tr key={ticket.ticket_id} className="hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors cursor-pointer">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                <tr key={ticket.ticket_id} className="transition-colors cursor-pointer">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     TKT-{ticket.ticket_id}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {ticket.subject}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-md uppercase
-                      ${ticket.priority === 'urgent' ? 'bg-red-100 text-red-800' : 
-                        ticket.priority === 'high' ? 'bg-orange-100 text-orange-800' : 
-                        'bg-gray-100 text-gray-800'}`}>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-md uppercase ${ticket.priority === 'urgent' ? 'bg-red-100 text-red-800' : ticket.priority === 'high' ? 'bg-orange-100 text-orange-800' : ' text-gray-800'}`}>
                       {ticket.priority}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${ticket.status === 'open' ? 'bg-blue-100 text-blue-800' : 
-                        ticket.status === 'resolved' || ticket.status === 'closed' ? 'bg-green-100 text-green-800' : 
-                        'bg-yellow-100 text-yellow-800'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${ticket.status === 'open' ? 'bg-blue-100 text-blue-800' : ticket.status === 'resolved' || ticket.status === 'closed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                       {ticket.status}
                     </span>
                   </td>

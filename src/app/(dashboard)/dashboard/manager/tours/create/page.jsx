@@ -27,8 +27,8 @@ export default function CreateTourPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Create New Tour</h1>
-        <p className="mt-1 text-gray-400">Fill out the details below to add a new tour to your catalog.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Create New Tour</h1>
+        <p className="mt-1 text-gray-600">Fill out the details below to add a new tour to your catalog.</p>
       </div>
 
       <TourForm onSubmit={handleSubmit} loading={loading} />

@@ -5,7 +5,7 @@ export default async function CustomerPanelLayout({ children }) {
   await requireRole();
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex min-h-screen">
       <CustomerSidebar />
       <main className="flex-1 overflow-x-hidden">
         <div className="max-w-7xl mx-auto p-8">

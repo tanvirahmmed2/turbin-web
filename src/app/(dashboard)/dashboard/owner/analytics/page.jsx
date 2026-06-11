@@ -27,61 +27,58 @@ export default function OwnerAnalytics() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Performance Analytics</h1>
-        <p className="mt-1 text-gray-400">High-level overview of your tour business.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Performance Analytics</h1>
+        <p className="mt-1 text-gray-600">High-level overview of your tour business.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gray-800 rounded-3xl border border-[#222] p-6">
-          <div className="text-gray-400 text-sm font-medium mb-2">Total Revenue</div>
+        <div className="rounded-3xl border border-gray-200 p-6 bg-white">
+          <div className="text-gray-600 text-sm font-medium mb-2">Total Revenue</div>
           <div className="text-3xl font-bold text-green-400">${data.stats.total_revenue}</div>
         </div>
-        <div className="bg-gray-800 rounded-3xl border border-[#222] p-6">
-          <div className="text-gray-400 text-sm font-medium mb-2">Total Bookings</div>
+        <div className="rounded-3xl border border-gray-200 p-6 bg-white">
+          <div className="text-gray-600 text-sm font-medium mb-2">Total Bookings</div>
           <div className="text-3xl font-bold text-blue-400">{data.stats.total_bookings}</div>
         </div>
-        <div className="bg-gray-800 rounded-3xl border border-[#222] p-6">
-          <div className="text-gray-400 text-sm font-medium mb-2">Active Customers</div>
-          <div className="text-3xl font-bold text-white">{data.stats.total_customers}</div>
+        <div className="rounded-3xl border border-gray-200 p-6 bg-white">
+          <div className="text-gray-600 text-sm font-medium mb-2">Active Customers</div>
+          <div className="text-3xl font-bold text-gray-900">{data.stats.total_customers}</div>
         </div>
-        <div className="bg-gray-800 rounded-3xl border border-[#222] p-6">
-          <div className="text-gray-400 text-sm font-medium mb-2">Active Tours</div>
-          <div className="text-3xl font-bold text-white">{data.stats.active_tours}</div>
+        <div className="rounded-3xl border border-gray-200 p-6 bg-white">
+          <div className="text-gray-600 text-sm font-medium mb-2">Active Tours</div>
+          <div className="text-3xl font-bold text-gray-900">{data.stats.active_tours}</div>
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
-        <div className="p-6 border-b border-[#222]">
-          <h2 className="text-xl font-bold text-white">Recent Bookings</h2>
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
+        <div className="p-6 border-b border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900">Recent Bookings</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tour</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tour</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {data.recentBookings.map((booking) => (
-                <tr key={booking.booking_id} className="hover:bg-gray-700 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
+                <tr key={booking.booking_id} className="transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                     {booking.customer_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {booking.tour_title}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full capitalize
-                      ${booking.status === 'confirmed' ? 'bg-green-900/50 text-green-400' : 
-                        booking.status === 'cancelled' ? 'bg-red-900/50 text-red-400' : 
-                        'bg-yellow-900/50 text-yellow-400'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full capitalize ${booking.status === 'confirmed' ? 'bg-green-900/50 text-green-400' : booking.status === 'cancelled' ? 'bg-red-900/50 text-red-400' : 'bg-yellow-900/50 text-yellow-400'}`}>
                       {booking.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${booking.total_price}
                   </td>
                 </tr>

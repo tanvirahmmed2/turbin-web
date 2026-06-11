@@ -48,8 +48,8 @@ export default function ManageUsers() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">All Users</h1>
-          <p className="mt-1 text-gray-400">View and manage all registered accounts on your platform.</p>
+          <h1 className="text-3xl font-bold text-gray-900">All Users</h1>
+          <p className="mt-1 text-gray-600">View and manage all registered accounts on your platform.</p>
         </div>
         <div className="w-full sm:w-72">
           <input
@@ -57,32 +57,32 @@ export default function ManageUsers() {
             placeholder="Search by email..."
             value={searchEmail}
             onChange={(e) => setSearchEmail(e.target.value)}
-            className="w-full bg-gray-800 border border-[#222] rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">User</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Joined Date</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Joined Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {filteredUsers.map((user) => (
-                <tr key={user.user_id} className="hover:bg-gray-700 transition-colors">
+                <tr key={user.user_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-gray-700 rounded-full flex items-center justify-center text-gray-300 font-bold">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center text-gray-700 font-bold">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-bold text-white">{user.name}</div>
+                        <div className="text-sm font-bold text-gray-900">{user.name}</div>
                         <div className="text-xs text-gray-500">{user.email}</div>
                       </div>
                     </div>
@@ -92,27 +92,22 @@ export default function ManageUsers() {
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.user_id, e.target.value)}
                       disabled={updatingRole === user.user_id}
-                      className={`px-3 py-1 text-xs leading-5 font-semibold rounded-full capitalize border border-transparent focus:border-blue-500 focus:ring-2 focus:ring-blue-500 cursor-pointer outline-none appearance-none ${
-                        ['owner', 'manager'].includes(user.role) ? 'bg-purple-900/50 text-purple-400' : 
-                        ['staff', 'guide', 'support'].includes(user.role) ? 'bg-blue-900/50 text-blue-400' : 
-                        'bg-gray-700 text-gray-300'
-                      }`}
+                      className={`px-3 py-1 pr-8 text-xs leading-5 font-semibold rounded-full capitalize border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 cursor-pointer outline-none ${ ['owner', 'manager'].includes(user.role) ? 'bg-purple-100 text-purple-700' : ['staff', 'guide', 'support'].includes(user.role) ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700' }`}
                     >
-                      <option value="owner" className="bg-gray-800 text-white">Owner</option>
-                      <option value="manager" className="bg-gray-800 text-white">Manager</option>
-                      <option value="staff" className="bg-gray-800 text-white">Staff</option>
-                      <option value="guide" className="bg-gray-800 text-white">Guide</option>
-                      <option value="support" className="bg-gray-800 text-white">Support</option>
-                      <option value="customer" className="bg-gray-800 text-white">Customer</option>
+                      <option value="owner" className="text-gray-900">Owner</option>
+                      <option value="manager" className="text-gray-900">Manager</option>
+                      <option value="staff" className="text-gray-900">Staff</option>
+                      <option value="guide" className="text-gray-900">Guide</option>
+                      <option value="support" className="text-gray-900">Support</option>
+                      <option value="customer" className="text-gray-900">Customer</option>
                     </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                      ${user.is_verified ? 'bg-green-900/50 text-green-400' : 'bg-red-900/50 text-red-400'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.is_verified ? 'bg-green-900/50 text-green-400' : 'bg-red-900/50 text-red-400'}`}>
                       {user.is_verified ? 'Verified' : 'Unverified'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
                 </tr>

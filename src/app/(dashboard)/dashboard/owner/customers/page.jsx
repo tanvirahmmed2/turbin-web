@@ -26,34 +26,34 @@ export default function ManageCustomers() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Customers</h1>
-        <p className="mt-1 text-gray-400">View and manage customer accounts and booking history.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
+        <p className="mt-1 text-gray-600">View and manage customer accounts and booking history.</p>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Bookings</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Joined</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bookings</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Joined</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {customers.length > 0 ? customers.map((customer) => (
-                <tr key={customer.customer_id} className="hover:bg-gray-700 transition-colors">
+                <tr key={customer.customer_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-3">
                       <div className="h-10 w-10 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-400 font-bold">
                         {customer.name.charAt(0).toUpperCase()}
                       </div>
-                      <div className="text-sm font-bold text-white">{customer.name}</div>
+                      <div className="text-sm font-bold text-gray-900">{customer.name}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-300">{customer.email}</div>
+                    <div className="text-sm text-gray-700">{customer.email}</div>
                     {customer.phone && <div className="text-xs text-gray-500">{customer.phone}</div>}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -61,7 +61,7 @@ export default function ManageCustomers() {
                       {customer.total_bookings} Bookings
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(customer.created_at).toLocaleDateString()}
                   </td>
                 </tr>

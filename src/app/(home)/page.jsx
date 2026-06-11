@@ -8,7 +8,7 @@ export const revalidate = 60; // Revalidate page every 60 seconds
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
+    <main className="flex flex-col min-h-screen bg-white">
       <Hero />
       <Features />
       <UpcomingTours />

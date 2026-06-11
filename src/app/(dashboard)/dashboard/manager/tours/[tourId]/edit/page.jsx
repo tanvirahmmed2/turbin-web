@@ -50,8 +50,8 @@ export default function EditTourPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Edit Tour</h1>
-        <p className="mt-1 text-gray-400">Update the details and spots for this tour.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Edit Tour</h1>
+        <p className="mt-1 text-gray-600">Update the details and spots for this tour.</p>
       </div>
 
       {initialData && (

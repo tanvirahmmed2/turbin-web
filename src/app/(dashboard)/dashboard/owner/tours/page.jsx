@@ -41,8 +41,8 @@ export default function ManageTours() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white">Manage Tours</h1>
-          <p className="mt-1 text-gray-400">Create, edit, and manage your tour offerings.</p>
+          <h1 className="text-3xl font-bold text-gray-900">Manage Tours</h1>
+          <p className="mt-1 text-gray-600">Create, edit, and manage your tour offerings.</p>
         </div>
         <Link 
           href="/dashboard/manager/tours/create"
@@ -52,34 +52,33 @@ export default function ManageTours() {
         </Link>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tour Details</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Location</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Base Price</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tour Details</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Base Price</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {tours.length > 0 ? tours.map((tour) => (
-                <tr key={tour.tour_id} className="hover:bg-gray-700 transition-colors">
+                <tr key={tour.tour_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-white">{tour.title}</div>
+                    <div className="text-sm font-bold text-gray-900">{tour.title}</div>
                     <div className="text-xs text-gray-500 mt-1">ID: {tour.tour_id} • {tour.spots_count || 0} spots</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {tour.location}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     ${tour.base_price}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${tour.status === 'active' ? 'bg-green-900/50 text-green-400' : 'bg-gray-800 text-gray-400'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${tour.status === 'active' ? 'bg-green-900/50 text-green-400' : ' text-gray-400'}`}>
                       {tour.status}
                     </span>
                   </td>

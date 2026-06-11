@@ -18,30 +18,27 @@ export default function StaffTasks() {
     const columnTasks = tasks.filter(t => t.status === statusId);
     
     return (
-      <div className="bg-gray-700 rounded-3xl border border-[#222] p-4 flex flex-col h-full min-h-[500px]">
+      <div className="rounded-3xl border border-gray-200 p-4 flex flex-col h-full min-h-[500px] bg-white">
         <div className="flex justify-between items-center mb-4 px-2">
-          <h2 className="text-lg font-bold text-white">{title}</h2>
-          <span className="bg-gray-800 text-gray-400 text-xs py-1 px-2 rounded-full">{columnTasks.length}</span>
+          <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+          <span className="text-gray-600 text-xs py-1 px-2 rounded-full">{columnTasks.length}</span>
         </div>
         
         <div className="flex-1 space-y-4">
           {columnTasks.map(task => (
-            <div key={task.id} className="bg-gray-800 rounded-2xl p-5 border border-[#333] hover:border-gray-500 transition-colors group cursor-pointer">
+            <div key={task.id} className="rounded-2xl p-5 border border-[#333] hover:border-gray-500 transition-colors group cursor-pointer bg-white">
               <div className="flex justify-between items-start mb-2">
-                <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded border 
-                  ${task.priority === 'high' ? 'bg-red-900/30 text-red-400 border-red-500/20' : 
-                    task.priority === 'medium' ? 'bg-yellow-900/30 text-yellow-400 border-yellow-500/20' : 
-                    'bg-gray-700 text-gray-300 border-gray-600'}`}>
+                <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded border ${task.priority === 'high' ? 'bg-red-900/30 text-red-400 border-red-500/20' : task.priority === 'medium' ? 'bg-yellow-900/30 text-yellow-400 border-yellow-500/20' : ' text-gray-700 border-gray-600'} bg-white`}>
                   {task.priority} Priority
                 </span>
               </div>
-              <h3 className="text-md font-bold text-white mb-2">{task.title}</h3>
-              <p className="text-xs text-gray-400 mb-4">{task.description}</p>
+              <h3 className="text-md font-bold text-gray-900 mb-2">{task.title}</h3>
+              <p className="text-xs text-gray-600 mb-4">{task.description}</p>
               
               {/* Kanban controls */}
               <div className="flex justify-end gap-2 border-t border-[#333] pt-3 opacity-0 group-hover:opacity-100 transition-opacity">
                 {statusId !== 'todo' && (
-                  <button onClick={() => updateTaskStatus(task.id, statusId === 'done' ? 'in_progress' : 'todo')} className="text-xs text-gray-400 hover:text-white">
+                  <button onClick={() => updateTaskStatus(task.id, statusId === 'done' ? 'in_progress' : 'todo')} className="text-xs text-gray-600 hover:text-white">
                     &larr; Move Back
                   </button>
                 )}
@@ -54,7 +51,7 @@ export default function StaffTasks() {
             </div>
           ))}
           {columnTasks.length === 0 && (
-            <div className="text-center p-8 text-gray-600 text-sm border-2 border-dashed border-[#333] rounded-2xl">
+            <div className="text-center p-8 text-gray-600 text-sm border-2 border-dashed border-[#333] rounded-2xl bg-white">
               No tasks
             </div>
           )}
@@ -67,10 +64,10 @@ export default function StaffTasks() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white">Task Board</h1>
-          <p className="mt-1 text-gray-400">Manage your daily operational tasks and assignments.</p>
+          <h1 className="text-3xl font-bold text-gray-900">Task Board</h1>
+          <p className="mt-1 text-gray-600">Manage your daily operational tasks and assignments.</p>
         </div>
-        <button className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-xl font-medium transition-colors">
+        <button className="bg-pink-600 hover:bg-pink-700 text-gray-900 px-4 py-2 rounded-xl font-medium transition-colors">
           + New Task
         </button>
       </div>

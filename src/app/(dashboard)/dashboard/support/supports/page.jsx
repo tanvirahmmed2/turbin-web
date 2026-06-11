@@ -40,59 +40,52 @@ export default function ManageSupports() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Support Tickets</h1>
-        <p className="mt-1 text-gray-400">Manage inquiries and support requests from your customers.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Support Tickets</h1>
+        <p className="mt-1 text-gray-600">Manage inquiries and support requests from your customers.</p>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Subject</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Priority</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Action</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Subject</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Priority</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {tickets.length > 0 ? tickets.map((ticket) => (
-                <tr key={ticket.ticket_id} className="hover:bg-gray-700 transition-colors">
+                <tr key={ticket.ticket_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-white">{ticket.customer_name}</div>
+                    <div className="text-sm font-bold text-gray-900">{ticket.customer_name}</div>
                     <div className="text-xs text-gray-500">{ticket.customer_email}</div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm font-semibold text-white">{ticket.subject}</div>
-                    <div className="text-xs text-gray-400 max-w-xs truncate mt-1">{ticket.message}</div>
+                    <div className="text-sm font-semibold text-gray-900">{ticket.subject}</div>
+                    <div className="text-xs text-gray-600 max-w-xs truncate mt-1">{ticket.message}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md uppercase
-                      ${ticket.priority === 'urgent' ? 'bg-red-900/50 text-red-400 border border-red-500/20' : 
-                        ticket.priority === 'high' ? 'bg-orange-900/50 text-orange-400 border border-orange-500/20' : 
-                        'bg-gray-700 text-gray-300'}`}>
+                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-md uppercase ${ticket.priority === 'urgent' ? 'bg-red-900/50 text-red-400 border border-red-500/20' : ticket.priority === 'high' ? 'bg-orange-900/50 text-orange-400 border border-orange-500/20' : ' text-gray-300'} bg-white`}>
                       {ticket.priority}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full capitalize
-                      ${ticket.status === 'open' ? 'bg-blue-900/50 text-blue-400' : 
-                        ticket.status === 'in_progress' ? 'bg-yellow-900/50 text-yellow-400' : 
-                        ticket.status === 'resolved' ? 'bg-green-900/50 text-green-400' : 
-                        'bg-gray-700 text-gray-400'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full capitalize ${ticket.status === 'open' ? 'bg-blue-900/50 text-blue-400' : ticket.status === 'in_progress' ? 'bg-yellow-900/50 text-yellow-400' : ticket.status === 'resolved' ? 'bg-green-900/50 text-green-400' : ' text-gray-400'}`}>
                       {ticket.status.replace('_', ' ')}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(ticket.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <select 
                       value={ticket.status}
                       onChange={(e) => updateStatus(ticket.ticket_id, e.target.value)}
-                      className="bg-gray-700 border border-[#222] text-white text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
+                      className="border border-gray-200 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 bg-white"
                     >
                       <option value="open">Open</option>
                       <option value="in_progress">In Progress</option>

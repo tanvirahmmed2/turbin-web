@@ -28,45 +28,45 @@ export default function ManagerDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Operations Overview</h1>
-        <p className="mt-1 text-gray-400">Manage your tours, bookings, and customer interactions.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Operations Overview</h1>
+        <p className="mt-1 text-gray-600">Manage your tours, bookings, and customer interactions.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
-          <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Revenue</p>
-          <p className="text-3xl font-bold text-white mt-2">${data?.metrics?.revenue || 0}</p>
+        <div className="p-6 rounded-3xl border border-gray-200 shadow-sm bg-white">
+          <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Revenue</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">${data?.metrics?.revenue || 0}</p>
         </div>
-        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
-          <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Bookings</p>
-          <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.bookings || 0}</p>
+        <div className="p-6 rounded-3xl border border-gray-200 shadow-sm bg-white">
+          <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Bookings</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">{data?.metrics?.bookings || 0}</p>
         </div>
-        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
-          <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Customers</p>
-          <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.customers || 0}</p>
+        <div className="p-6 rounded-3xl border border-gray-200 shadow-sm bg-white">
+          <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Customers</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">{data?.metrics?.customers || 0}</p>
         </div>
-        <div className="bg-gray-800 p-6 rounded-3xl border border-[#222] shadow-sm">
-          <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">Active Tours</p>
-          <p className="text-3xl font-bold text-white mt-2">{data?.metrics?.active_tours || 0}</p>
+        <div className="p-6 rounded-3xl border border-gray-200 shadow-sm bg-white">
+          <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Active Tours</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">{data?.metrics?.active_tours || 0}</p>
         </div>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
-        <div className="p-6 border-b border-[#222] flex justify-between items-center">
-          <h2 className="text-xl font-bold text-white">Recent Activity</h2>
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
+        <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
         </div>
-        <div className="divide-y divide-[#222]">
+        <div className="divide-y divide-gray-200">
           {data?.recentActivity?.length > 0 ? (
             data.recentActivity.map(activity => (
-              <div key={activity.booking_id} className="p-6 hover:bg-gray-700 transition-colors flex justify-between items-center">
+              <div key={activity.booking_id} className="p-6 transition-colors flex justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-bold text-white">{activity.customer_name} booked {activity.tour_title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">
+                  <h3 className="text-lg font-bold text-gray-900">{activity.customer_name} booked {activity.tour_title}</h3>
+                  <p className="text-gray-600 text-sm mt-1">
                     {new Date(activity.created_at).toLocaleString()}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-white">${activity.total_price}</p>
+                  <p className="font-bold text-gray-900">${activity.total_price}</p>
                   <span className={`text-xs px-2 py-1 rounded-full ${activity.status === 'confirmed' ? 'bg-green-900/50 text-green-400' : 'bg-yellow-900/50 text-yellow-400'}`}>
                     {activity.status}
                   </span>

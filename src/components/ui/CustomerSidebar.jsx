@@ -27,8 +27,8 @@ export default function CustomerSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen sticky top-0 flex flex-col">
-      <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+    <aside className="w-64 bg-white border-r border-gray-200 h-screen sticky top-0 flex flex-col">
+      <div className="p-6 border-b border-gray-200">
         <Link href="/" className="text-2xl font-black tracking-tight" style={{ color: website?.theme_color || '#3b82f6' }}>
           {website?.name || 'TourBooking'}
         </Link>
@@ -41,11 +41,7 @@ export default function CustomerSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                isActive 
-                  ? 'bg-gray-100 dark:bg-gray-800/50 font-semibold' 
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/50 hover:text-gray-900 dark:hover:text-white'
-              }`}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${ isActive ? ' font-semibold' : 'text-gray-600 hover:text-gray-900 :text-white' }`}
               style={isActive ? { color: website?.theme_color || '#3b82f6' } : {}}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,10 +52,10 @@ export default function CustomerSidebar() {
           );
         })}
       </nav>
-      <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+      <div className="p-4 border-t border-gray-200">
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 :bg-red-900/10 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

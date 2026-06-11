@@ -20,65 +20,65 @@ const MenuBar = ({ editor }) => {
   const toggleBlockquote = (e) => { e.preventDefault(); editor.chain().focus().toggleBlockquote().run(); };
 
   return (
-    <div className="flex flex-wrap items-center gap-1 p-2 bg-gray-800 border-b border-gray-700 rounded-t-xl">
+    <div className="flex flex-wrap items-center gap-1 p-2 border-b border-gray-200 rounded-t-xl bg-white">
       <button
         onClick={toggleBold}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('bold') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bold') ? ' text-white' : 'text-gray-400'}`}
         title="Bold"
       >
         <Bold size={16} />
       </button>
       <button
         onClick={toggleItalic}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('italic') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('italic') ? ' text-white' : 'text-gray-400'}`}
         title="Italic"
       >
         <Italic size={16} />
       </button>
       <button
         onClick={toggleStrike}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('strike') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('strike') ? ' text-white' : 'text-gray-400'}`}
         title="Strike"
       >
         <Strikethrough size={16} />
       </button>
 
-      <div className="w-px h-5 bg-gray-600 mx-1"></div>
+      <div className="w-px h-5 mx-1"></div>
 
       <button
         onClick={toggleH1}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('heading', { level: 1 }) ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? ' text-white' : 'text-gray-400'}`}
         title="Heading 1"
       >
         <Heading1 size={16} />
       </button>
       <button
         onClick={toggleH2}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? ' text-white' : 'text-gray-400'}`}
         title="Heading 2"
       >
         <Heading2 size={16} />
       </button>
 
-      <div className="w-px h-5 bg-gray-600 mx-1"></div>
+      <div className="w-px h-5 mx-1"></div>
 
       <button
         onClick={toggleBulletList}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('bulletList') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bulletList') ? ' text-white' : 'text-gray-400'}`}
         title="Bullet List"
       >
         <List size={16} />
       </button>
       <button
         onClick={toggleOrderedList}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('orderedList') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('orderedList') ? ' text-white' : 'text-gray-400'}`}
         title="Numbered List"
       >
         <ListOrdered size={16} />
       </button>
       <button
         onClick={toggleBlockquote}
-        className={`p-2 rounded hover:bg-gray-700 transition-colors ${editor.isActive('blockquote') ? 'bg-gray-700 text-white' : 'text-gray-400'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('blockquote') ? ' text-white' : 'text-gray-400'}`}
         title="Quote"
       >
         <Quote size={16} />
@@ -103,7 +103,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write s
     content: value,
     editorProps: {
       attributes: {
-        className: 'prose prose-sm sm:prose-base prose-invert prose-p:my-1 prose-headings:my-2 focus:outline-none min-h-[120px] max-w-none p-4 bg-gray-900 rounded-b-xl border border-t-0 border-gray-700 text-gray-200',
+        className: 'prose prose-sm sm:prose-base prose-invert prose-p:my-1 prose-headings:my-2 focus:outline-none min-h-[120px] max-w-none p-4  rounded-b-xl border border-t-0 border-gray-700 text-gray-200',
       },
     },
     onUpdate: ({ editor }) => {
@@ -112,7 +112,7 @@ export default function RichTextEditor({ value, onChange, placeholder = 'Write s
   });
 
   return (
-    <div className="rich-text-editor border border-gray-700 rounded-xl overflow-hidden focus-within:border-blue-500 transition-colors">
+    <div className="rich-text-editor border border-gray-200 rounded-xl overflow-hidden focus-within:border-blue-500 transition-colors bg-white">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
       <style jsx global>{`

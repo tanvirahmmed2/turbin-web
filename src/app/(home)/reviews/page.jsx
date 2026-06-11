@@ -28,7 +28,7 @@ export default function ReviewsPage() {
     return [...Array(5)].map((_, i) => (
       <svg 
         key={i} 
-        className={`w-5 h-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-700'}`} 
+        className={`w-5 h-5 ${i < rating ? 'text-yellow-400' : 'text-gray-300 '}`} 
         fill="currentColor" 
         viewBox="0 0 20 20"
       >
@@ -39,19 +39,19 @@ export default function ReviewsPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <main className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin bg-white"></div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-900 pt-24 pb-24">
+    <main className="min-h-screen bg-white pt-24 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white">Traveler Reviews</h1>
-          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">Traveler Reviews</h1>
+          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
             Don't just take our word for it. Read what our adventurers have to say about their experiences.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function ReviewsPage() {
             {reviews.map(review => (
               <div 
                 key={review.review_id} 
-                className="bg-white dark:bg-gray-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-lg relative overflow-hidden group"
+                className="bg-white p-8 rounded-3xl border border-gray-200 shadow-lg relative overflow-hidden group"
               >
                 <div 
                   className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -72,16 +72,16 @@ export default function ReviewsPage() {
                   {renderStars(review.rating)}
                 </div>
                 
-                <p className="text-gray-600 dark:text-gray-300 mb-6 text-lg italic">
+                <p className="text-gray-600 mb-6 text-lg italic">
                   "{review.comment}"
                 </p>
                 
-                <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800 mt-auto">
+                <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-auto">
                   <div>
-                    <h4 className="font-bold text-gray-900 dark:text-white">{review.customer_name}</h4>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">On: {review.tour_title}</span>
+                    <h4 className="font-bold text-gray-900">{review.customer_name}</h4>
+                    <span className="text-sm text-gray-500">On: {review.tour_title}</span>
                   </div>
-                  <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-xl font-bold text-gray-500">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold text-gray-500">
                     {review.customer_name.charAt(0)}
                   </div>
                 </div>
@@ -89,9 +89,9 @@ export default function ReviewsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 bg-gray-50 dark:bg-gray-900 rounded-3xl border border-gray-200 dark:border-gray-800">
-            <h3 className="text-xl font-medium text-gray-900 dark:text-white">No reviews yet</h3>
-            <p className="mt-2 text-gray-500 dark:text-gray-400">Be the first to share your adventure with us!</p>
+          <div className="text-center py-24 rounded-3xl border border-gray-200 bg-white">
+            <h3 className="text-xl font-medium text-gray-900">No reviews yet</h3>
+            <p className="mt-2 text-gray-500">Be the first to share your adventure with us!</p>
           </div>
         )}
 

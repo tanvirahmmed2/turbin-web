@@ -40,17 +40,17 @@ export default function ManageReviews() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Customer Reviews</h1>
-        <p className="mt-1 text-gray-400">Moderate and approve reviews before they appear on your website.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Customer Reviews</h1>
+        <p className="mt-1 text-gray-600">Moderate and approve reviews before they appear on your website.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {reviews.length > 0 ? reviews.map((review) => (
-          <div key={review.review_id} className="bg-gray-800 rounded-3xl border border-[#222] p-6 flex flex-col justify-between">
+          <div key={review.review_id} className="rounded-3xl border border-gray-200 p-6 flex flex-col justify-between bg-white">
             <div>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <div className="text-white font-bold">{review.customer_name}</div>
+                  <div className="text-gray-900 font-bold">{review.customer_name}</div>
                   <div className="text-xs text-gray-500">{review.tour_title}</div>
                 </div>
                 <div className="flex text-yellow-400">
@@ -61,27 +61,23 @@ export default function ManageReviews() {
                   ))}
                 </div>
               </div>
-              <p className="text-gray-300 text-sm mb-4 italic">"{review.comment}"</p>
+              <p className="text-gray-700 text-sm mb-4 italic">"{review.comment}"</p>
             </div>
             
-            <div className="flex justify-between items-center pt-4 border-t border-[#222]">
+            <div className="flex justify-between items-center pt-4 border-t border-gray-200">
               <span className="text-xs text-gray-500">
                 {new Date(review.created_at).toLocaleDateString()}
               </span>
               <button
                 onClick={() => toggleApproval(review.review_id, review.is_approved)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                  review.is_approved 
-                    ? 'bg-green-900/50 text-green-400 hover:bg-green-900' 
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${ review.is_approved ? 'bg-green-900/50 text-green-400 hover:bg-green-900' : ' text-gray-700 ' }`}
               >
                 {review.is_approved ? 'Approved' : 'Hidden'}
               </button>
             </div>
           </div>
         )) : (
-          <div className="col-span-full p-12 text-center text-gray-500 bg-gray-800 rounded-3xl border border-[#222]">
+          <div className="col-span-full p-12 text-center text-gray-500 rounded-3xl border border-gray-200 bg-white">
             No reviews yet.
           </div>
         )}

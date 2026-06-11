@@ -26,46 +26,42 @@ export default function ManagePayments() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white">Payments & Transactions</h1>
-        <p className="mt-1 text-gray-400">Review all customer transactions and payment statuses.</p>
+        <h1 className="text-3xl font-bold text-gray-900">Payments & Transactions</h1>
+        <p className="mt-1 text-gray-600">Review all customer transactions and payment statuses.</p>
       </div>
 
-      <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
+      <div className="rounded-3xl border border-gray-200 overflow-hidden bg-white">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-gray-700">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Transaction ID</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Transaction ID</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#222]">
+            <tbody className="divide-y divide-gray-200">
               {payments.length > 0 ? payments.map((payment) => (
-                <tr key={payment.payment_id} className="hover:bg-gray-700 transition-colors">
+                <tr key={payment.payment_id} className="transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-white">{payment.transaction_id || 'N/A'}</div>
+                    <div className="text-sm font-medium text-gray-900">{payment.transaction_id || 'N/A'}</div>
                     <div className="text-xs text-gray-500">via {payment.provider || 'Stripe'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-white">{payment.customer_name}</div>
-                    <div className="text-xs text-gray-400">{payment.tour_title}</div>
+                    <div className="text-sm font-bold text-gray-900">{payment.customer_name}</div>
+                    <div className="text-xs text-gray-600">{payment.tour_title}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-400">
                     ${payment.amount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${payment.payment_status === 'success' ? 'bg-green-900/50 text-green-400' : 
-                        payment.payment_status === 'refunded' ? 'bg-gray-700 text-gray-300' : 
-                        payment.payment_status === 'failed' ? 'bg-red-900/50 text-red-400' :
-                        'bg-yellow-900/50 text-yellow-400'}`}>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${payment.payment_status === 'success' ? 'bg-green-900/50 text-green-400' : payment.payment_status === 'refunded' ? ' text-gray-300' : payment.payment_status === 'failed' ? 'bg-red-900/50 text-red-400' : 'bg-yellow-900/50 text-yellow-400'}`}>
                       {payment.payment_status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {payment.paid_at ? new Date(payment.paid_at).toLocaleString() : 'Pending'}
                   </td>
                 </tr>

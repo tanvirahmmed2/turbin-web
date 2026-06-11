@@ -26,10 +26,10 @@ export default function ForgetPasswordForm() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl shadow-xl">
+    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-xl shadow-xl">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Forgot Password</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+        <h2 className="text-3xl font-bold tracking-tight text-gray-900">Forgot Password</h2>
+        <p className="text-sm text-gray-500 mt-2">
           {submitted ? "Check your email for the reset link." : "Enter your email to receive a password reset link."}
         </p>
       </div>
@@ -37,7 +37,7 @@ export default function ForgetPasswordForm() {
       {!submitted ? (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" htmlFor="email">
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
               Email Address
             </label>
             <input
@@ -47,7 +47,7 @@ export default function ForgetPasswordForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
               placeholder="john@example.com"
             />
           </div>
@@ -62,7 +62,7 @@ export default function ForgetPasswordForm() {
         </form>
       ) : (
         <div className="text-center py-4">
-          <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
@@ -70,7 +70,7 @@ export default function ForgetPasswordForm() {
         </div>
       )}
 
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-gray-600">
         Remember your password?{' '}
         <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-500 transition-colors">
           Sign in

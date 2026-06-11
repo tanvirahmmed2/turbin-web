@@ -44,15 +44,15 @@ function ResetPasswordInner() {
   };
 
   return (
-    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl shadow-xl">
+    <div className="w-full max-w-md p-8 space-y-6 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-xl shadow-xl">
       <div className="text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Set New Password</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Enter your new password below.</p>
+        <h2 className="text-3xl font-bold tracking-tight text-gray-900">Set New Password</h2>
+        <p className="text-sm text-gray-500 mt-2">Enter your new password below.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" htmlFor="newPassword">
+          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="newPassword">
             New Password
           </label>
           <input
@@ -62,13 +62,13 @@ function ResetPasswordInner() {
             required
             value={formData.newPassword}
             onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
             placeholder="••••••••"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" htmlFor="confirmPassword">
+          <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="confirmPassword">
             Confirm Password
           </label>
           <input
@@ -78,7 +78,7 @@ function ResetPasswordInner() {
             required
             value={formData.confirmPassword}
             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-            className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white"
             placeholder="••••••••"
           />
         </div>
@@ -97,7 +97,7 @@ function ResetPasswordInner() {
 
 export default function ResetPasswordForm() {
   return (
-    <Suspense fallback={<div className="text-white">Loading...</div>}>
+    <Suspense fallback={<div className="text-gray-900">Loading...</div>}>
       <ResetPasswordInner />
     </Suspense>
   );
