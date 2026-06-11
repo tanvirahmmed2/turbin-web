@@ -55,7 +55,7 @@ export default function ManageTours() {
       <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tour Details</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Location</th>
@@ -66,7 +66,7 @@ export default function ManageTours() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {tours.length > 0 ? tours.map((tour) => (
-                <tr key={tour.tour_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={tour.tour_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-bold text-white">{tour.title}</div>
                     <div className="text-xs text-gray-500 mt-1">ID: {tour.tour_id} • {tour.spots_count || 0} spots</div>

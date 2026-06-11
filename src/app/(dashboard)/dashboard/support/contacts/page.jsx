@@ -60,7 +60,7 @@ export default function ManageContacts() {
                   {contact.status}
                 </span>
               </div>
-              <div className="bg-[#1a1a1a] p-4 rounded-xl text-gray-300 text-sm mb-4 border border-[#333] min-h-[100px]">
+              <div className="bg-gray-700 p-4 rounded-xl text-gray-300 text-sm mb-4 border border-[#333] min-h-[100px]">
                 {contact.message}
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function ManageContacts() {
               <select 
                 value={contact.status}
                 onChange={(e) => updateStatus(contact.contact_id, e.target.value)}
-                className="bg-[#1a1a1a] border border-[#222] text-white text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
+                className="bg-gray-700 border border-[#222] text-white text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"
               >
                 <option value="unread">Unread</option>
                 <option value="read">Read</option>

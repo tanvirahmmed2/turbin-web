@@ -39,7 +39,7 @@ export default function GuideJobs() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#1a1a1a] p-4 border-t border-[#222] flex justify-end">
+            <div className="bg-gray-700 p-4 border-t border-[#222] flex justify-end">
               <button className="text-sm font-semibold text-blue-400 hover:text-blue-300">View Manifest &rarr;</button>
             </div>
           </div>

@@ -33,7 +33,7 @@ export default function ManagePayments() {
       <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Transaction ID</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
@@ -44,7 +44,7 @@ export default function ManagePayments() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {payments.length > 0 ? payments.map((payment) => (
-                <tr key={payment.payment_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={payment.payment_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-white">{payment.transaction_id || 'N/A'}</div>
                     <div className="text-xs text-gray-500">via {payment.provider || 'Stripe'}</div>

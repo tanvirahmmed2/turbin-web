@@ -47,7 +47,7 @@ export default function ManageSupports() {
       <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Subject</th>
@@ -59,7 +59,7 @@ export default function ManageSupports() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {tickets.length > 0 ? tickets.map((ticket) => (
-                <tr key={ticket.ticket_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={ticket.ticket_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-bold text-white">{ticket.customer_name}</div>
                     <div className="text-xs text-gray-500">{ticket.customer_email}</div>
@@ -92,7 +92,7 @@ export default function ManageSupports() {
                     <select 
                       value={ticket.status}
                       onChange={(e) => updateStatus(ticket.ticket_id, e.target.value)}
-                      className="bg-[#1a1a1a] border border-[#222] text-white text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
+                      className="bg-gray-700 border border-[#222] text-white text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
                     >
                       <option value="open">Open</option>
                       <option value="in_progress">In Progress</option>

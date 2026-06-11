@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export function middleware(request) {
+export function proxy(request) {
   const token = request.cookies.get('auth_token')?.value;
   const url = request.nextUrl.clone();
   
@@ -10,17 +10,13 @@ export function middleware(request) {
   }
 
   try {
-    // Decode JWT payload (the second part of the token)
     const payloadBase64Url = token.split('.')[1];
     
-    // Convert base64url to base64
     let payloadBase64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
     
-    // Pad string with '=' to make its length a multiple of 4
     const padLength = (4 - (payloadBase64.length % 4)) % 4;
     payloadBase64 += '='.repeat(padLength);
     
-    // Decode base64 using atob (Edge compatible) and decodeURIComponent for UTF-8 safety
     const jsonPayload = decodeURIComponent(
       atob(payloadBase64)
         .split('')
@@ -32,13 +28,11 @@ export function middleware(request) {
     
     const isDashboard = request.nextUrl.pathname.startsWith('/dashboard');
 
-    // Customer trying to access dashboard -> redirect to their panel
     if (isDashboard && role === 'customer') {
       url.pathname = '/panel';
       return NextResponse.redirect(url);
     }
 
-    // Management trying to access /panel -> allowed (per request: "all users can access /panel")
     
   } catch (error) {
     console.error('Middleware decoding error:', error);

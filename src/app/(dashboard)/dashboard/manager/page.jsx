@@ -58,7 +58,7 @@ export default function ManagerDashboard() {
         <div className="divide-y divide-[#222]">
           {data?.recentActivity?.length > 0 ? (
             data.recentActivity.map(activity => (
-              <div key={activity.booking_id} className="p-6 hover:bg-[#1a1a1a] transition-colors flex justify-between items-center">
+              <div key={activity.booking_id} className="p-6 hover:bg-gray-700 transition-colors flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-bold text-white">{activity.customer_name} booked {activity.tour_title}</h3>
                   <p className="text-gray-400 text-sm mt-1">

@@ -96,8 +96,8 @@ export default function DashboardSidebar() {
   const links = getLinks();
 
   return (
-    <aside className="w-64 bg-gray-800 text-gray-300 border-r border-[#222] h-screen sticky top-0 flex flex-col">
-      <div className="p-6 border-b border-[#222]">
+    <aside className="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen sticky top-0 flex flex-col">
+      <div className="p-6 border-b border-gray-200 dark:border-gray-800">
         <Link href="/" className="text-2xl font-black tracking-tight" style={{ color: website?.theme_color || '#3b82f6' }}>
           {website?.name || 'TourBooking'}
         </Link>
@@ -105,39 +105,33 @@ export default function DashboardSidebar() {
       </div>
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {links.map((link, idx) => {
-          const isActive = pathname.startsWith(link.href) && link.href !== '#';
           return (
             <Link
               key={idx}
               href={link.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                isActive 
-                  ? 'bg-[#222] text-white font-semibold' 
-                  : 'hover:bg-[#1a1a1a] hover:text-white'
-              }`}
-              style={isActive ? { borderLeft: `3px solid ${website?.theme_color || '#3b82f6'}` } : { borderLeft: '3px solid transparent' }}
+              className="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/50 hover:text-gray-900 dark:hover:text-white"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive ? "2.5" : "2"} d={link.icon} />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={link.icon} />
               </svg>
               <span>{link.label}</span>
             </Link>
           );
         })}
       </nav>
-      <div className="p-4 border-t border-[#222] space-y-3">
-        <div className="flex items-center space-x-3 px-4 py-3 bg-[#1a1a1a] rounded-xl">
-          <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xs uppercase">
+      <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-3">
+        <div className="flex items-center space-x-3 px-4 py-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-800">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs uppercase" style={{ backgroundColor: website?.theme_color || '#3b82f6' }}>
             {role ? role.substring(0, 2) : '??'}
           </div>
           <div>
-            <p className="text-sm font-semibold text-white capitalize">{role || 'Loading'}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white capitalize">{role || 'Loading'}</p>
             <p className="text-xs text-gray-500">Logged In</p>
           </div>
         </div>
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

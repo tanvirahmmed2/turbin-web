@@ -141,7 +141,7 @@ export default function ManageSpots() {
       <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Spot Details</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Location</th>
@@ -151,7 +151,7 @@ export default function ManageSpots() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {spots.length > 0 ? spots.map((spot) => (
-                <tr key={spot.spot_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={spot.spot_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center">
                       {spot.image ? (

@@ -33,7 +33,7 @@ export default function ManageBookings() {
       <div className="bg-gray-800 rounded-3xl border border-[#222] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tour</th>
@@ -44,7 +44,7 @@ export default function ManageBookings() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {bookings.length > 0 ? bookings.map((booking) => (
-                <tr key={booking.booking_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={booking.booking_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-bold text-white">{booking.customer_name}</div>
                     <div className="text-xs text-gray-500">{booking.customer_email}</div>

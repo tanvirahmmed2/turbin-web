@@ -18,7 +18,7 @@ export default function StaffTasks() {
     const columnTasks = tasks.filter(t => t.status === statusId);
     
     return (
-      <div className="bg-[#1a1a1a] rounded-3xl border border-[#222] p-4 flex flex-col h-full min-h-[500px]">
+      <div className="bg-gray-700 rounded-3xl border border-[#222] p-4 flex flex-col h-full min-h-[500px]">
         <div className="flex justify-between items-center mb-4 px-2">
           <h2 className="text-lg font-bold text-white">{title}</h2>
           <span className="bg-gray-800 text-gray-400 text-xs py-1 px-2 rounded-full">{columnTasks.length}</span>

@@ -56,7 +56,7 @@ export default function OwnerAnalytics() {
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-[#222]">
-            <thead className="bg-[#1a1a1a]">
+            <thead className="bg-gray-700">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Customer</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Tour</th>
@@ -66,7 +66,7 @@ export default function OwnerAnalytics() {
             </thead>
             <tbody className="divide-y divide-[#222]">
               {data.recentBookings.map((booking) => (
-                <tr key={booking.booking_id} className="hover:bg-[#1a1a1a] transition-colors">
+                <tr key={booking.booking_id} className="hover:bg-gray-700 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                     {booking.customer_name}
                   </td>
