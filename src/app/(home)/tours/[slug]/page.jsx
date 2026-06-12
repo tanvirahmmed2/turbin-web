@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useAppContext } from '@/components/helper/Context';
 
 export default function TourDetailsPage() {
-  const { tourId } = useParams();
+  const { slug } = useParams();
   const { website } = useAppContext();
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ export default function TourDetailsPage() {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const response = await axios.get(`/api/tours/${tourId}`);
+        const response = await axios.get(`/api/tours/${slug}`);
         setTour(response.data.tour);
       } catch (err) {
         console.error('Error fetching tour:', err);
@@ -25,8 +25,10 @@ export default function TourDetailsPage() {
       }
     };
 
-    fetchTour();
-  }, [tourId]);
+    if (slug) {
+      fetchTour();
+    }
+  }, [slug]);
 
   if (loading) {
     return (
@@ -54,13 +56,21 @@ export default function TourDetailsPage() {
         {/* Header Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
           <div className="space-y-6">
-            <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
-              <span>{tour.starting_location}</span>
-              {tour.finish_location && tour.finish_location !== tour.starting_location && (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                  <span>{tour.finish_location}</span>
-                </>
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-semibold">
+                <span>{tour.starting_location}</span>
+                {tour.finish_location && tour.finish_location !== tour.starting_location && (
+                  <>
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    <span>{tour.finish_location}</span>
+                  </>
+                )}
+              </div>
+              {tour.duration && (
+                <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-semibold">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <span>{tour.duration}</span>
+                </div>
               )}
             </div>
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">

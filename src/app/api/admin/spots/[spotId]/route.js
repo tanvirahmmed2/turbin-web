@@ -10,7 +10,7 @@ export async function PUT(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { spotId } = params;
+    const { spotId } = await params;
     const body = await req.json();
     const { name, description, location, image, image_id } = body;
 
@@ -36,7 +36,7 @@ export async function DELETE(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { spotId } = params;
+    const { spotId } = await params;
 
     await dbQuery(
       `DELETE FROM tour_spots WHERE spot_id = $1 AND tenant_id = $2`,

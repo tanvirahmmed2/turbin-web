@@ -10,7 +10,7 @@ export async function GET(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { featureId } = params;
+    const { featureId } = await params;
 
     const result = await dbQuery(
       `SELECT feature_id, name, created_at 
@@ -38,7 +38,7 @@ export async function PUT(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { featureId } = params;
+    const { featureId } = await params;
     const body = await req.json();
     const { name } = body;
 
@@ -68,7 +68,7 @@ export async function DELETE(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { featureId } = params;
+    const { featureId } = await params;
 
     await dbQuery(
       `DELETE FROM tour_features 

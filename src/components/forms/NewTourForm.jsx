@@ -9,6 +9,7 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
+    duration: initialData?.duration || '',
     starting_location: initialData?.starting_location || '',
     finish_location: initialData?.finish_location || '',
     base_price: initialData?.base_price || '',
@@ -20,6 +21,11 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
 
   const [spots, setSpots] = useState(initialData?.spots || []);
   const [features, setFeatures] = useState(initialData?.features || []);
+  const [schedules, setSchedules] = useState(initialData?.schedules?.map(s => ({
+    ...s,
+    tour_date: s.tour_date ? new Date(s.tour_date).toISOString().split('T')[0] : '',
+    last_registration_date: s.last_registration_date ? new Date(s.last_registration_date).toISOString().slice(0, 16) : ''
+  })) || []);
   const [availableSpots, setAvailableSpots] = useState([]);
   const [availableFeatures, setAvailableFeatures] = useState([]);
 
@@ -82,9 +88,25 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
     setFeatures(updatedFeatures);
   };
 
+  const addSchedule = () => {
+    setSchedules([...schedules, { tour_date: '', start_time: '', end_time: '', last_registration_date: '', max_seats: '' }]);
+  };
+
+  const removeSchedule = (index) => {
+    const updated = [...schedules];
+    updated.splice(index, 1);
+    setSchedules(updated);
+  };
+
+  const handleScheduleChange = (index, field, value) => {
+    const updated = [...schedules];
+    updated[index][field] = value;
+    setSchedules(updated);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ ...formData, spots, features });
+    onSubmit({ ...formData, spots, features, schedules });
   };
 
   return (
@@ -110,6 +132,17 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
               value={formData.description}
               onChange={(value) => setFormData((prev) => ({ ...prev, description: value }))}
               placeholder="Describe the tour..."
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-600 mb-2">Duration</label>
+            <input
+              type="text"
+              name="duration"
+              value={formData.duration}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-blue-500 bg-white"
+              placeholder="e.g. 3 Days 2 Nights"
             />
           </div>
           <div>
@@ -294,6 +327,86 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="p-8 rounded-3xl border border-gray-200 bg-white">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Tour Schedules</h2>
+          <button
+            type="button"
+            onClick={addSchedule}
+            className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
+          >
+            + Add Schedule
+          </button>
+        </div>
+
+        {schedules.length === 0 ? (
+          <p className="text-gray-500 text-center py-6">No schedules added yet.</p>
+        ) : (
+          <div className="space-y-6">
+            {schedules.map((schedule, index) => (
+              <div key={index} className="p-4 rounded-2xl border border-gray-200 bg-gray-50 grid grid-cols-1 md:grid-cols-2 gap-4 relative pt-10 md:pt-4">
+                <button
+                  type="button"
+                  onClick={() => removeSchedule(index)}
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-600 font-medium text-sm z-10"
+                >
+                  Remove
+                </button>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Tour Date *</label>
+                  <input
+                    type="date"
+                    required
+                    value={schedule.tour_date || ''}
+                    onChange={(e) => handleScheduleChange(index, 'tour_date', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-gray-900"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Registration Deadline *</label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={schedule.last_registration_date || ''}
+                    onChange={(e) => handleScheduleChange(index, 'last_registration_date', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-gray-900"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Start Time</label>
+                  <input
+                    type="time"
+                    value={schedule.start_time || ''}
+                    onChange={(e) => handleScheduleChange(index, 'start_time', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-gray-900"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">End Time</label>
+                  <input
+                    type="time"
+                    value={schedule.end_time || ''}
+                    onChange={(e) => handleScheduleChange(index, 'end_time', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-gray-900"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Max Seats *</label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={schedule.max_seats || ''}
+                    onChange={(e) => handleScheduleChange(index, 'max_seats', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 bg-white text-gray-900"
+                  />
+                </div>
               </div>
             ))}
           </div>

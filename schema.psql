@@ -155,6 +155,8 @@ CREATE TABLE tour_tours (
   starting_location TEXT,
   finish_location TEXT,
 
+  duration TEXT,
+
   base_price NUMERIC(10,2),
   separate_room_available BOOLEAN DEFAULT false,
   separate_room_charge NUMERIC(10,2) DEFAULT 0.00,

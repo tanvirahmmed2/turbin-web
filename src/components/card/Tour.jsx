@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Tour({ tour }) {
@@ -6,7 +7,7 @@ export default function Tour({ tour }) {
       <div className="aspect-[4/3] overflow-hidden relative">
         {/* Placeholder for Tour Image. We could add tour.image_url later */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-        <img 
+        <Image width={1000} height={1000} 
           src={`https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${tour.tour_id}`} 
           alt={tour.title} 
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
@@ -19,12 +20,19 @@ export default function Tour({ tour }) {
       
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex items-center text-sm text-gray-500 mb-2">
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
           <span className="truncate">
             {tour.starting_location} 
             {tour.finish_location && tour.finish_location !== tour.starting_location && ` → ${tour.finish_location}`}
           </span>
         </div>
+
+        {tour.duration && (
+          <div className="flex items-center text-sm text-gray-500 mb-2">
+            <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span className="truncate">{tour.duration}</span>
+          </div>
+        )}
         
         <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
           {tour.title}
@@ -35,7 +43,7 @@ export default function Tour({ tour }) {
         </p>
         
         <Link 
-          href={`/tours/${tour.slug || tour.tour_id}`}
+          href={`/tours/${tour.slug}`}
           className="w-full text-center py-3 rounded-xl border border-gray-200 text-gray-900 font-medium transition-colors bg-white"
         >
           View Details

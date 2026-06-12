@@ -13,7 +13,7 @@ export async function GET(req) {
 
     // Fetch tours with spot counts
     const result = await dbQuery(
-      `SELECT t.tour_id, t.title, t.starting_location, t.finish_location, t.base_price, t.separate_room_available, t.separate_room_charge, t.seat, t.status, t.created_at, 
+      `SELECT t.tour_id, t.title, t.duration, t.starting_location, t.finish_location, t.base_price, t.separate_room_available, t.separate_room_charge, t.seat, t.status, t.created_at, 
               COUNT(ts.spot_id) as spots_count
        FROM tour_tours t
        LEFT JOIN tour_tour_spots ts ON t.tour_id = ts.tour_id
@@ -39,14 +39,16 @@ export async function POST(req) {
 
     const tenantId = session.tenant_id;
     const body = await req.json();
-    const { title, description, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, spots = [], features = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, spots = [], features = [], schedules = [] } = body;
+
+    const slug = title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : '';
 
     const tourId = await transaction(async (client) => {
       // 1. Insert tour
       const tourResult = await client.query(
-        `INSERT INTO tour_tours (tenant_id, title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING tour_id`,
-        [tenantId, title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat]
+        `INSERT INTO tour_tours (tenant_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING tour_id`,
+        [tenantId, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat]
       );
       const newTourId = tourResult.rows[0].tour_id;
 
@@ -80,6 +82,25 @@ export async function POST(req) {
               [newTourId, feature.feature_id]
             );
           }
+        }
+      }
+      
+      // 4. Insert schedules
+      if (schedules && schedules.length > 0) {
+        for (const schedule of schedules) {
+          await client.query(
+            `INSERT INTO tour_schedules (tour_id, tour_date, start_time, end_time, last_registration_date, max_seats, available_seats) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [
+              newTourId, 
+              schedule.tour_date, 
+              schedule.start_time || null, 
+              schedule.end_time || null, 
+              schedule.last_registration_date, 
+              schedule.max_seats, 
+              schedule.max_seats // Set available to max by default
+            ]
+          );
         }
       }
       

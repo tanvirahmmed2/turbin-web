@@ -10,10 +10,10 @@ export async function GET(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { tourId } = params;
+    const { tourId } = await params;
 
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
+      `SELECT tour_id, title, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2`,
       [tourId, tenantId]
@@ -40,9 +40,18 @@ export async function GET(req, { params }) {
       [tourId]
     );
 
+    const schedulesRes = await dbQuery(
+      `SELECT schedule_id, tour_date, start_time, end_time, last_registration_date, max_seats, available_seats 
+       FROM tour_schedules 
+       WHERE tour_id = $1
+       ORDER BY tour_date ASC`,
+      [tourId]
+    );
+
     return NextResponse.json({ 
       tour: {
         ...tourRes.rows[0],
+        schedules: schedulesRes.rows,
         spots: spotsRes.rows,
         features: featuresRes.rows
       }
@@ -61,17 +70,19 @@ export async function PUT(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { tourId } = params;
+    const { tourId } = await params;
     const body = await req.json();
-    const { title, description, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, status, spots = [], features = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, status, spots = [], features = [], schedules = [] } = body;
+
+    const slug = title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : '';
 
     await transaction(async (client) => {
       // 1. Update tour details
       await client.query(
         `UPDATE tour_tours 
-         SET title = $1, description = $2, starting_location = $3, finish_location = $4, base_price = $5, separate_room_available = $6, separate_room_charge = $7, seat = $8, status = COALESCE($9, status)
-         WHERE tour_id = $10 AND tenant_id = $11`,
-        [title, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, tourId, tenantId]
+         SET title = $1, slug = $2, description = $3, duration = $4, starting_location = $5, finish_location = $6, base_price = $7, separate_room_available = $8, separate_room_charge = $9, seat = $10, status = COALESCE($11, status)
+         WHERE tour_id = $12 AND tenant_id = $13`,
+        [title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, tourId, tenantId]
       );
 
       // 2. Sync spots: delete existing linkages
@@ -125,6 +136,34 @@ export async function PUT(req, { params }) {
           }
         }
       }
+
+      // 5. Sync schedules
+      const existingSchedulesRes = await client.query(`SELECT schedule_id FROM tour_schedules WHERE tour_id = $1`, [tourId]);
+      const existingScheduleIds = existingSchedulesRes.rows.map(s => s.schedule_id);
+      
+      const newScheduleIds = schedules.filter(s => s.schedule_id).map(s => s.schedule_id);
+      
+      const schedulesToDelete = existingScheduleIds.filter(id => !newScheduleIds.includes(id));
+      if (schedulesToDelete.length > 0) {
+        await client.query(`DELETE FROM tour_schedules WHERE schedule_id = ANY($1::int[])`, [schedulesToDelete]);
+      }
+
+      for (const schedule of schedules) {
+        if (schedule.schedule_id) {
+          await client.query(
+            `UPDATE tour_schedules 
+             SET tour_date = $1, start_time = $2, end_time = $3, last_registration_date = $4, max_seats = $5
+             WHERE schedule_id = $6`,
+            [schedule.tour_date, schedule.start_time || null, schedule.end_time || null, schedule.last_registration_date, schedule.max_seats, schedule.schedule_id]
+          );
+        } else {
+          await client.query(
+            `INSERT INTO tour_schedules (tour_id, tour_date, start_time, end_time, last_registration_date, max_seats, available_seats) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [tourId, schedule.tour_date, schedule.start_time || null, schedule.end_time || null, schedule.last_registration_date, schedule.max_seats, schedule.max_seats]
+          );
+        }
+      }
     });
 
     return NextResponse.json({ success: true, message: 'Tour updated successfully' });
@@ -142,7 +181,7 @@ export async function DELETE(req, { params }) {
     }
 
     const tenantId = session.tenant_id;
-    const { tourId } = params;
+    const { tourId } = await params;
 
     await dbQuery(
       `DELETE FROM tour_tours WHERE tour_id = $1 AND tenant_id = $2`,
