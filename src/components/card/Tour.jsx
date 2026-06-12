@@ -7,8 +7,8 @@ export default function Tour({ tour }) {
       <div className="aspect-[4/3] overflow-hidden relative">
         {/* Placeholder for Tour Image. We could add tour.image_url later */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
-        <Image width={1000} height={1000} 
-          src={`https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${tour.tour_id}`} 
+        <img 
+          src={tour.spots?.[0]?.image || `https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${tour.tour_id}`} 
           alt={tour.title} 
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
         />
@@ -33,13 +33,20 @@ export default function Tour({ tour }) {
             <span className="truncate">{tour.duration}</span>
           </div>
         )}
+
+        {tour.spots && tour.spots.length > 0 && (
+          <div className="flex items-center text-sm text-gray-500 mb-2">
+            <svg className="w-4 h-4 mr-1 flex-shrink-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+            <span className="truncate font-medium text-gray-700">{tour.spots.map(s => s.name).join(', ')}</span>
+          </div>
+        )}
         
         <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
           {tour.title}
         </h3>
         
         <p className="text-gray-600 text-sm line-clamp-2 mb-4 flex-1">
-          {tour.description}
+          {tour.description?.replace(/<[^>]*>?/gm, '') || ''}
         </p>
         
         <Link 

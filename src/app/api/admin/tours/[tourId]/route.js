@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dbQuery, transaction } from '@/lib/db';
 import { getSession } from '@/lib/auth';
+import slugify from 'slugify';
 
 export async function GET(req, { params }) {
   try {
@@ -13,7 +14,7 @@ export async function GET(req, { params }) {
     const { tourId } = await params;
 
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
+      `SELECT tour_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2`,
       [tourId, tenantId]
@@ -74,7 +75,7 @@ export async function PUT(req, { params }) {
     const body = await req.json();
     const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, status, spots = [], features = [], schedules = [] } = body;
 
-    const slug = title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : '';
+    const slug = title ? slugify(title, { lower: true, strict: true }) : '';
 
     await transaction(async (client) => {
       // 1. Update tour details

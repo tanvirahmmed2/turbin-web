@@ -1,12 +1,34 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import { useAppContext } from '@/components/helper/Context';
 
 export default function Hero() {
   const { website } = useAppContext();
+  const [spotImages, setSpotImages] = useState([]);
   
-  if (!website) return null;
+  useEffect(() => {
+    const fetchSpots = async () => {
+      try {
+        const response = await axios.get('/api/spots');
+        const spots = response.data.spots || [];
+        // Extract images and take up to 4
+        const images = spots.map(s => s.image).filter(Boolean);
+        // If we don't have enough, pad with a fallback
+        while (images.length < 4) {
+          images.push(`https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${images.length}`);
+        }
+        setSpotImages(images.slice(0, 4));
+      } catch (err) {
+        console.error('Failed to fetch spots for hero:', err);
+      }
+    };
+    fetchSpots();
+  }, []);
+
+  if (!website || spotImages.length === 0) return null;
 
   const { hero_title, hero_subtitle, theme_color } = website;
 
@@ -50,18 +72,18 @@ export default function Hero() {
               <div className="space-y-4">
                 <div className="h-2/3 rounded-2xl overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/40 to-transparent mix-blend-overlay"></div>
-                  <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80" alt="Travel" className="w-full h-full object-cover" />
+                  <img src={spotImages[0]} alt="Travel Destination 1" className="w-full h-full object-cover" />
                 </div>
                 <div className="h-1/3 rounded-2xl overflow-hidden relative">
-                  <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80" alt="Travel" className="w-full h-full object-cover" />
+                  <img src={spotImages[1]} alt="Travel Destination 2" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="space-y-4 pt-12">
                 <div className="h-1/3 rounded-2xl overflow-hidden relative">
-                   <img src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&q=80" alt="Travel" className="w-full h-full object-cover" />
+                   <img src={spotImages[2]} alt="Travel Destination 3" className="w-full h-full object-cover" />
                 </div>
                 <div className="h-2/3 rounded-2xl overflow-hidden relative">
-                   <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&q=80" alt="Travel" className="w-full h-full object-cover" />
+                   <img src={spotImages[3]} alt="Travel Destination 4" className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>

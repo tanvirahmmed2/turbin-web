@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import axios from 'axios';
 import { useAppContext } from '@/components/helper/Context';
 
@@ -76,9 +77,10 @@ export default function TourDetailsPage() {
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
               {tour.title}
             </h1>
-            <p className="text-lg text-gray-600">
-              {tour.description}
-            </p>
+            <div 
+              className="prose prose-lg text-gray-600 max-w-none"
+              dangerouslySetInnerHTML={{ __html: tour.description }}
+            />
             <div className="flex items-center space-x-6 pt-4">
               <div>
                 <span className="block text-sm text-gray-500">Starting from</span>
@@ -100,12 +102,42 @@ export default function TourDetailsPage() {
             </div>
           </div>
 
-          <div className="h-[400px] w-full rounded-3xl overflow-hidden border border-gray-200 shadow-xl relative bg-white">
-            <img 
-              src={`https://source.unsplash.com/random/800x600/?${encodeURIComponent(tour.finish_location || tour.starting_location || 'travel')}`} 
-              alt={tour.title}
-              className="w-full h-full object-cover"
-            />
+          <div className="flex flex-col space-y-4">
+            <div className="h-[400px] w-full rounded-3xl overflow-hidden border border-gray-200 shadow-xl relative bg-white flex snap-x snap-mandatory overflow-x-auto hide-scrollbar">
+              {tour.spots && tour.spots.length > 0 ? (
+                tour.spots.map((spot, i) => (
+                  <div key={spot.spot_id || i} className="min-w-full h-full snap-center relative">
+                    <img 
+                      src={spot.image || `https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${tour.tour_id + i}`} 
+                      alt={spot.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold text-gray-900 shadow">
+                      {spot.name}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="min-w-full h-full snap-center relative">
+                  <img 
+                    src={`https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&q=80&w=800&random=${tour.tour_id}`} 
+                    alt={tour.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
+            {/* Spot Names Badges */}
+            {tour.spots && tour.spots.length > 0 && (
+              <div className="flex flex-wrap gap-2 items-center pt-2">
+                <span className="text-sm font-semibold text-gray-500">Visiting Spots:</span>
+                {tour.spots.map(spot => (
+                  <Link href={`/spots/${spot.spot_id}`} key={spot.spot_id} className="px-3 py-1 bg-gray-100 text-gray-700 hover:text-blue-600 hover:bg-blue-50 text-sm rounded-full font-medium border border-gray-200 transition-colors">
+                    {spot.name}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

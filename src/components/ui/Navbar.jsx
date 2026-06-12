@@ -9,7 +9,7 @@ export default function Navbar({ session }) {
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  
+
   const { website } = useAppContext();
   const brandName = website?.hero_title || 'TourApp';
 
@@ -44,12 +44,12 @@ export default function Navbar({ session }) {
             {brandName}
           </span>
         </Link>
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative" ref={dropdownRef}>
+        <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative" ref={dropdownRef}>
           {session ? (
-            <div className="relative">
-              <button 
+            <div className="relative hidden md:block">
+              <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 :ring-gray-600" 
+                className="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 :ring-gray-600"
                 type="button"
               >
                 <span className="sr-only">Open user menu</span>
@@ -59,7 +59,7 @@ export default function Navbar({ session }) {
                   </svg>
                 </div>
               </button>
-              
+
               {/* Dropdown menu */}
               {isDropdownOpen && (
                 <div className="absolute right-0 top-10 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
@@ -81,7 +81,7 @@ export default function Navbar({ session }) {
                       </li>
                     )}
                     <li>
-                      <button 
+                      <button
                         onClick={async () => {
                           try {
                             await fetch('/api/user/logout', { method: 'POST' });
@@ -101,20 +101,29 @@ export default function Navbar({ session }) {
             </div>
           ) : (
             <>
-              <Link 
-                href="/login" 
-                className="text-gray-900 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors mr-2"
+              <Link
+                href="/login"
+                className="hidden md:block text-gray-900 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors mr-2"
               >
                 Log in
               </Link>
-              <Link 
-                href="/register" 
-                className="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
+              <Link
+                href="/register"
+                className="hidden md:block text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
               >
                 Sign up
               </Link>
             </>
           )}
+
+          {/* Toggle Menu Button */}
+          <Link 
+            href={`${pathname}?menu=open`}
+            className="md:hidden p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg className="w-7 h-7" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
+          </Link>
         </div>
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent md: bg-white">
@@ -122,7 +131,7 @@ export default function Navbar({ session }) {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`block py-2 px-3 rounded md:p-0 transition-colors ${ pathname === link.href ? 'text-blue-600 ' : 'text-gray-900 hover:text-blue-600 md::text-blue-500' }`}
+                  className={`block py-2 px-3 rounded md:p-0 transition-colors ${pathname === link.href ? 'text-blue-600 ' : 'text-gray-900 hover:text-blue-600 md::text-blue-500'}`}
                 >
                   {link.name}
                 </Link>

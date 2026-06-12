@@ -35,8 +35,8 @@ export default function Footer() {
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-6">Company</h4>
             <ul className="space-y-4">
               <li><Link href="/about" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Careers</Link></li>
-              <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Blog</Link></li>
+              <li><Link href="/tours" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Tours</Link></li>
+              <li><Link href="/spots" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Spots</Link></li>
               <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Contact</Link></li>
             </ul>
           </div>
@@ -44,7 +44,7 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-6">Legal</h4>
             <ul className="space-y-4">
-              <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Terms of Service</Link></li>
+              <li><Link href="/terms" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Terms & Conditions</Link></li>
               <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Privacy Policy</Link></li>
               <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Cookie Policy</Link></li>
             </ul>
@@ -54,7 +54,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} {brandName}. All rights reserved. Powered by Tour SaaS.
+            © {new Date().getFullYear()} {brandName}. All rights reserved. Powered by <Link href={'https://disibin.com'}>Disibin</Link>.
           </p>
           
           {/* Social Icons */}
