@@ -14,7 +14,7 @@ export async function GET(req) {
 
     // Fetch tours with spot counts
     const result = await dbQuery(
-      `SELECT t.tour_id, t.title, t.slug, t.duration, t.starting_location, t.finish_location, t.base_price, t.separate_room_available, t.separate_room_charge, t.seat, t.status, t.created_at, 
+      `SELECT t.tour_id, t.title, t.slug, t.duration, t.starting_location, t.finish_location, t.base_price, t.separate_room_available, t.separate_room_charge, t.status, t.created_at, 
               COUNT(ts.spot_id) as spots_count
        FROM tour_tours t
        LEFT JOIN tour_tour_spots ts ON t.tour_id = ts.tour_id
@@ -40,16 +40,16 @@ export async function POST(req) {
 
     const tenantId = session.tenant_id;
     const body = await req.json();
-    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, spots = [], features = [], schedules = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, spots = [], features = [], schedules = [] } = body;
 
     const slug = title ? slugify(title, { lower: true, strict: true }) : '';
 
     const tourId = await transaction(async (client) => {
       // 1. Insert tour
       const tourResult = await client.query(
-        `INSERT INTO tour_tours (tenant_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING tour_id`,
-        [tenantId, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat]
+        `INSERT INTO tour_tours (tenant_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING tour_id`,
+        [tenantId, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge]
       );
       const newTourId = tourResult.rows[0].tour_id;
 

@@ -1,10 +1,28 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useAppContext } from '@/components/helper/Context';
 import Link from 'next/link';
+import axios from 'axios';
 
 export default function AboutPage() {
   const { website } = useAppContext();
+  const [spotImages, setSpotImages] = useState([]);
+
+  useEffect(() => {
+    const fetchSpots = async () => {
+      try {
+        const response = await axios.get('/api/spots');
+        const images = (response.data.spots || [])
+          .map(s => s.image)
+          .filter(Boolean);
+        setSpotImages(images.slice(0, 3));
+      } catch (err) {
+        console.error('Failed to fetch spots for about page:', err);
+      }
+    };
+    fetchSpots();
+  }, []);
 
   return (
     <main className="min-h-screen bg-white pt-24 pb-24">
@@ -21,17 +39,18 @@ export default function AboutPage() {
         </div>
 
         {/* Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-          <div className="h-80 rounded-3xl overflow-hidden shadow-lg border border-gray-200 bg-white">
-            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80" alt="Travelers" className="w-full h-full object-cover" />
+        {spotImages.length > 0 && (
+          <div className={`grid grid-cols-1 ${spotImages.length === 3 ? 'md:grid-cols-3' : spotImages.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-1'} gap-6 mb-24`}>
+            {spotImages.map((imgUrl, idx) => (
+              <div 
+                key={idx} 
+                className={`h-80 rounded-3xl overflow-hidden shadow-lg border border-gray-200 bg-white ${idx === 1 && spotImages.length >= 3 ? 'md:mt-12' : ''}`}
+              >
+                <img src={imgUrl} alt="Travel Destination" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              </div>
+            ))}
           </div>
-          <div className="h-80 md:mt-12 rounded-3xl overflow-hidden shadow-lg border border-gray-200 bg-white">
-            <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&q=80" alt="Mountain View" className="w-full h-full object-cover" />
-          </div>
-          <div className="h-80 rounded-3xl overflow-hidden shadow-lg border border-gray-200 bg-white">
-            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80" alt="Beach" className="w-full h-full object-cover" />
-          </div>
-        </div>
+        )}
 
         {/* Story Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

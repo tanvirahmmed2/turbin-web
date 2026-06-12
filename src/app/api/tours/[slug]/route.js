@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
 
     // Fetch the main tour details
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, slug, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, created_at 
+      `SELECT tour_id, title, slug, description, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, status, created_at 
        FROM tour_tours 
        WHERE (slug = $1 OR tour_id::text = $1) AND tenant_id = $2 AND status = 'active'`,
       [slug, tenantId]

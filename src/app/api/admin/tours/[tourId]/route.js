@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
     const { tourId } = await params;
 
     const tourRes = await dbQuery(
-      `SELECT tour_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status 
+      `SELECT tour_id, title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, status 
        FROM tour_tours 
        WHERE tour_id = $1 AND tenant_id = $2`,
       [tourId, tenantId]
@@ -73,7 +73,7 @@ export async function PUT(req, { params }) {
     const tenantId = session.tenant_id;
     const { tourId } = await params;
     const body = await req.json();
-    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, seat = 0, status, spots = [], features = [], schedules = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, status, spots = [], features = [], schedules = [] } = body;
 
     const slug = title ? slugify(title, { lower: true, strict: true }) : '';
 
@@ -81,9 +81,9 @@ export async function PUT(req, { params }) {
       // 1. Update tour details
       await client.query(
         `UPDATE tour_tours 
-         SET title = $1, slug = $2, description = $3, duration = $4, starting_location = $5, finish_location = $6, base_price = $7, separate_room_available = $8, separate_room_charge = $9, seat = $10, status = COALESCE($11, status)
-         WHERE tour_id = $12 AND tenant_id = $13`,
-        [title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, seat, status, tourId, tenantId]
+         SET title = $1, slug = $2, description = $3, duration = $4, starting_location = $5, finish_location = $6, base_price = $7, separate_room_available = $8, separate_room_charge = $9, status = COALESCE($10, status)
+         WHERE tour_id = $11 AND tenant_id = $12`,
+        [title, slug, description, duration, starting_location, finish_location, base_price, separate_room_available, separate_room_charge, status, tourId, tenantId]
       );
 
       // 2. Sync spots: delete existing linkages

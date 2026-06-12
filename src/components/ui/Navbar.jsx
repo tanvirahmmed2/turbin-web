@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppContext } from '@/components/helper/Context';
+import Image from 'next/image';
 
 export default function Navbar({ session }) {
   const pathname = usePathname();
@@ -20,7 +21,6 @@ export default function Navbar({ session }) {
     { name: 'Contact', href: '/contact' },
   ];
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -34,11 +34,11 @@ export default function Navbar({ session }) {
   }, [dropdownRef]);
 
   return (
-    <nav className="fixed w-full z-50 top-0 start-0 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between p-4">
+    <nav className="fixed w-full z-50 top-0 inset-s-0 border-b border-gray-200 bg-white/80 h-14 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between  p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           {website?.logo_url && (
-            <img src={website.logo_url} alt={brandName} className="h-8 rounded-md" />
+            <Image width={100} height={100} src={website.logo_url} alt={brandName} className="h-8 rounded-md" />
           )}
           <span className="self-center text-2xl font-bold whitespace-nowrap text-gray-900">
             {brandName}

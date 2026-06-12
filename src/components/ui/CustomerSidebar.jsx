@@ -1,12 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useAppContext } from '@/components/helper/Context';
 
 export default function CustomerSidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { website } = useAppContext();
+
+  const isOpen = searchParams.get('sidebar') === 'open';
+  const onClose = () => router.push(pathname);
 
   const links = [
     { href: '/panel', label: 'Overview', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
@@ -27,13 +32,30 @@ export default function CustomerSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 h-screen sticky top-0 flex flex-col">
-      <div className="p-6 border-b border-gray-200">
-        <Link href="/" className="text-2xl font-black tracking-tight" style={{ color: website?.theme_color || '#3b82f6' }}>
-          {website?.name || 'TourBooking'}
-        </Link>
-        <div className="mt-1 text-xs text-gray-500 font-medium uppercase tracking-wider">Customer Portal</div>
-      </div>
+    <>
+      {/* Mobile Backdrop */}
+      <div 
+        className={`fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        onClick={onClose}
+      />
+
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 h-screen flex flex-col transform transition-transform duration-300 md:translate-x-0 md:static ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="p-6 border-b border-gray-200">
+          <div className="flex justify-between items-center w-full">
+            <div>
+              <Link href="/" className="flex items-center gap-2 text-2xl font-black tracking-tight" style={{ color: website?.theme_color || '#3b82f6' }}>
+                {website?.logo_url ? (
+                  <img src={website.logo_url} alt="Logo" className="h-8 w-auto object-contain" />
+                ) : null}
+                <span>{website?.name || website?.hero_title || 'TourBooking'}</span>
+              </Link>
+              <div className="mt-1 text-xs text-gray-500 font-medium uppercase tracking-wider">Customer Portal</div>
+            </div>
+            <button onClick={onClose} className="md:hidden p-2 text-gray-400 hover:text-gray-900 bg-gray-50 rounded-full">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
+        </div>
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {links.map((link) => {
           const isActive = pathname === link.href;
@@ -41,8 +63,9 @@ export default function CustomerSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${ isActive ? ' font-semibold' : 'text-gray-600 hover:text-gray-900 :text-white' }`}
-              style={isActive ? { color: website?.theme_color || '#3b82f6' } : {}}
+              onClick={onClose}
+              className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${ isActive ? ' font-semibold' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }`}
+              style={isActive ? { color: website?.theme_color || '#3b82f6', backgroundColor: `${website?.theme_color || '#3b82f6'}10` } : {}}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive ? "2.5" : "2"} d={link.icon} />
@@ -64,5 +87,6 @@ export default function CustomerSidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

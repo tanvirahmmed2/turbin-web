@@ -5,7 +5,7 @@ import { getSession } from '@/lib/auth';
 export async function GET(req) {
   try {
     const session = getSession(req);
-    if (!session || session.role !== 'customer') {
+    if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -18,7 +18,10 @@ export async function GET(req) {
     );
 
     if (customerRes.rows.length === 0) {
-      return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
+      return NextResponse.json({
+        stats: { total_bookings: 0, total_spent: 0 },
+        upcoming_bookings: []
+      });
     }
 
     const customerId = customerRes.rows[0].customer_id;

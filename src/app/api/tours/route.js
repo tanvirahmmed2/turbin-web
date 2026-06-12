@@ -8,7 +8,7 @@ export async function GET(req) {
 
     const result = await dbQuery(
       `SELECT 
-        t.tour_id, t.title, t.slug, t.description, t.starting_location, t.finish_location, t.base_price, t.duration, t.separate_room_available, t.separate_room_charge, t.seat, t.status, t.created_at,
+        t.tour_id, t.title, t.slug, t.description, t.starting_location, t.finish_location, t.base_price, t.duration, t.separate_room_available, t.separate_room_charge, t.status, t.created_at,
         (
           SELECT COALESCE(json_agg(json_build_object('spot_id', s.spot_id, 'name', s.name, 'image', s.image)), '[]'::json)
           FROM tour_tour_spots ts

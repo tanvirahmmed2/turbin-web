@@ -160,7 +160,6 @@ CREATE TABLE tour_tours (
   base_price NUMERIC(10,2),
   separate_room_available BOOLEAN DEFAULT false,
   separate_room_charge NUMERIC(10,2) DEFAULT 0.00,
-  seat INT DEFAULT 0,
 
   status TEXT DEFAULT 'active'
     CHECK (
@@ -295,6 +294,10 @@ CREATE TABLE tour_bookings (
   seats INT NOT NULL,
 
   total_price NUMERIC(10,2),
+  
+  phone TEXT,
+  transaction_id TEXT,
+  separate_room BOOLEAN DEFAULT false,
 
   status TEXT DEFAULT 'pending'
     CHECK (

@@ -38,6 +38,7 @@ export default function Footer() {
               <li><Link href="/tours" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Tours</Link></li>
               <li><Link href="/spots" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Spots</Link></li>
               <li><Link href="/contact" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Contact</Link></li>
+              <li><Link href="/verify-ticket" className="text-gray-600 hover:text-blue-600 :text-blue-400 transition-colors">Verify Ticket</Link></li>
             </ul>
           </div>
 

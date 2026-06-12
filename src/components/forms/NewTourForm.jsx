@@ -13,7 +13,6 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
     starting_location: initialData?.starting_location || '',
     finish_location: initialData?.finish_location || '',
     base_price: initialData?.base_price || '',
-    seat: initialData?.seat || '',
     separate_room_available: initialData?.separate_room_available || false,
     separate_room_charge: initialData?.separate_room_charge || '',
     status: initialData?.status || 'active',
@@ -181,18 +180,6 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
               step="0.01"
               className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-blue-500 bg-white"
               placeholder="e.g. 499.00"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-600 mb-2">Number of Seats</label>
-            <input
-              type="number"
-              name="seat"
-              value={formData.seat}
-              onChange={handleChange}
-              min="0"
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-blue-500 bg-white"
-              placeholder="e.g. 15"
             />
           </div>
           {initialData && (
