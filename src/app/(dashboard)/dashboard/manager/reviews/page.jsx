@@ -63,6 +63,17 @@ export default function ManageReviews() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <div className="text-gray-900 font-bold">{review.customer_name}</div>
+                  <div className="mt-1">
+                    {review.is_approved ? (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800">
+                        Published
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800">
+                        Pending
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
@@ -79,7 +90,7 @@ export default function ManageReviews() {
               <span className="text-xs text-gray-500">
                 {new Date(review.created_at).toLocaleDateString()}
               </span>
-              <div className="flex space-x-2">
+              <div className="flex items-center space-x-2">
                 <button
                   onClick={() => deleteReview(review.review_id)}
                   className="p-1.5 rounded-full text-red-500 hover:bg-red-50 transition-colors"
@@ -89,9 +100,9 @@ export default function ManageReviews() {
                 </button>
                 <button
                   onClick={() => toggleApproval(review.review_id, review.is_approved)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${ review.is_approved ? 'bg-green-50 text-green-600 hover:bg-green-100' : ' text-gray-700 hover:bg-gray-100' }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${ review.is_approved ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-green-600 text-white hover:bg-green-700' }`}
                 >
-                  {review.is_approved ? 'Approved' : 'Hidden'}
+                  {review.is_approved ? 'Hide' : 'Approve'}
                 </button>
               </div>
             </div>
