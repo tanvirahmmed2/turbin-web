@@ -55,7 +55,8 @@ export default function Sidebar({ session }) {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`block py-3 px-4 rounded-xl transition-colors font-medium text-base ${isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'}`}
+                  style={isActive ? { backgroundColor: website?.theme_color ? `${website.theme_color}20` : '#eff6ff', color: website?.theme_color || '#3b82f6' } : {}}
+                  className={`block py-3 px-4 rounded-xl transition-colors font-medium text-base ${isActive ? '' : 'text-gray-700 hover:bg-gray-50'}`}
                   onClick={onClose}
                 >
                   {link.name}
@@ -106,7 +107,8 @@ export default function Sidebar({ session }) {
                 </Link>
                 <Link
                   href="/register"
-                  className="w-full text-center text-white bg-blue-600 hover:bg-blue-700 font-semibold rounded-xl text-sm px-4 py-3 transition-colors shadow-sm"
+                  style={{ backgroundColor: website?.theme_color || '#3b82f6' }}
+                  className="w-full text-center text-white font-semibold rounded-xl text-sm px-4 py-3 transition-colors shadow-sm hover:opacity-90"
                   onClick={onClose}
                 >
                   Sign up

@@ -14,7 +14,17 @@ export async function GET(req) {
           FROM tour_tour_spots ts
           JOIN tour_spots s ON ts.spot_id = s.spot_id
           WHERE ts.tour_id = t.tour_id
-        ) as spots
+        ) as spots,
+        (
+          SELECT COALESCE(SUM(available_seats), 0)
+          FROM tour_schedules
+          WHERE tour_id = t.tour_id AND tour_date >= CURRENT_DATE
+        ) as available_seats,
+        (
+          SELECT COUNT(schedule_id)
+          FROM tour_schedules
+          WHERE tour_id = t.tour_id AND tour_date >= CURRENT_DATE
+        ) as upcoming_schedules
        FROM tour_tours t
        WHERE t.tenant_id = $1 AND t.status = 'active'
        ORDER BY t.created_at DESC

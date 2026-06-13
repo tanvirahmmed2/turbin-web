@@ -3,6 +3,18 @@
 @theme {
   --color-primary: #3b82f6;
   --color-primary-foreground: #ffffff;
+  
+  /* Override blue to use dynamic primary color */
+  --color-blue-50: color-mix(in srgb, var(--color-primary) 10%, white);
+  --color-blue-100: color-mix(in srgb, var(--color-primary) 20%, white);
+  --color-blue-200: color-mix(in srgb, var(--color-primary) 30%, white);
+  --color-blue-300: color-mix(in srgb, var(--color-primary) 40%, white);
+  --color-blue-400: color-mix(in srgb, var(--color-primary) 60%, white);
+  --color-blue-500: var(--color-primary);
+  --color-blue-600: color-mix(in srgb, var(--color-primary) 85%, black);
+  --color-blue-700: color-mix(in srgb, var(--color-primary) 70%, black);
+  --color-blue-800: color-mix(in srgb, var(--color-primary) 50%, black);
+  --color-blue-900: color-mix(in srgb, var(--color-primary) 30%, black);
 }
 
 body {

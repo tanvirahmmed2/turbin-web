@@ -13,8 +13,8 @@ export default function HomePage() {
       <Hero />
       <Features />
       <UpcomingTours />
-      <ReviewsSlider />
       <Stats />
+      <ReviewsSlider />
       <CallToAction />
     </main>
   );

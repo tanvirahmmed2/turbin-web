@@ -109,7 +109,8 @@ export default function Navbar({ session }) {
               </Link>
               <Link
                 href="/register"
-                className="hidden md:block text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors"
+                style={{ backgroundColor: website?.theme_color || '#3b82f6' }}
+                className="hidden md:block text-white font-medium rounded-lg text-sm px-4 py-2 text-center transition-colors hover:opacity-90"
               >
                 Sign up
               </Link>
@@ -131,7 +132,8 @@ export default function Navbar({ session }) {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`block py-2 px-3 rounded md:p-0 transition-colors ${pathname === link.href ? 'text-blue-600 ' : 'text-gray-900 hover:text-blue-600 md::text-blue-500'}`}
+                  style={pathname === link.href ? { color: website?.theme_color || '#3b82f6' } : {}}
+                  className={`block py-2 px-3 rounded md:p-0 transition-colors ${pathname === link.href ? 'font-bold' : 'text-gray-900 hover:opacity-70'}`}
                 >
                   {link.name}
                 </Link>

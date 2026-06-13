@@ -36,7 +36,6 @@ export async function generateMetadata() {
 export default async function RootLayout({ children }) {
   const { tenant_status, subscription_status } = await getTenantStatus();
 
-  // Enforce strict access control: no bypasses
   if (tenant_status !== 'active' || (subscription_status !== 'active' && subscription_status !== 'trial')) {
     return (
       <html lang="en">
@@ -47,8 +46,8 @@ export default async function RootLayout({ children }) {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Service Unavailable</h1>
             <p className="text-gray-500 mb-6">
-              {tenant_status !== 'active' 
-                ? `This website is currently ${tenant_status}.` 
+              {tenant_status !== 'active'
+                ? `This website is currently ${tenant_status}.`
                 : `This website's subscription is ${subscription_status}.`}
             </p>
             <div className="text-sm text-gray-400">

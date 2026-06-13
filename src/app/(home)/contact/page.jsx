@@ -34,7 +34,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-gray-900">Phone</h4>
-                    <p className="text-gray-600 mt-1">{website?.phone || '+1 (555) 123-4567'}</p>
+                    <p className="text-gray-600 mt-1">{website?.phone}</p>
                   </div>
                 </div>
 
@@ -47,7 +47,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-gray-900">Email</h4>
-                    <p className="text-gray-600 mt-1">{website?.email || 'hello@tourcompany.com'}</p>
+                    <p className="text-gray-600 mt-1">{website?.email}</p>
                   </div>
                 </div>
 
@@ -60,7 +60,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h4 className="text-sm font-semibold text-gray-900">Office</h4>
-                    <p className="text-gray-600 mt-1">{website?.address || '123 Adventure Way, Wanderlust City'}</p>
+                    <p className="text-gray-600 mt-1">{website?.address}</p>
                   </div>
                 </div>
               </div>
