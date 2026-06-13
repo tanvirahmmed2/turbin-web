@@ -26,10 +26,12 @@ export async function GET(req, { params }) {
 
     // Fetch upcoming schedules
     const schedulesRes = await dbQuery(
-      `SELECT schedule_id, tour_date, start_time, end_time, last_registration_date, max_seats, available_seats 
-       FROM tour_schedules 
-       WHERE tour_id = $1 AND tour_date >= CURRENT_DATE 
-       ORDER BY tour_date ASC`,
+      `SELECT s.schedule_id, s.tour_date, s.start_time, s.end_time, s.last_registration_date, s.max_seats, s.available_seats,
+         (SELECT COALESCE(SUM(seats), 0) FROM tour_bookings WHERE schedule_id = s.schedule_id AND status = 'pending') as reserved_seats,
+         (SELECT COALESCE(SUM(seats), 0) FROM tour_bookings WHERE schedule_id = s.schedule_id AND status = 'confirmed') as booked_seats
+       FROM tour_schedules s 
+       WHERE s.tour_id = $1 AND s.tour_date >= CURRENT_DATE 
+       ORDER BY s.tour_date ASC`,
       [tourId]
     );
 

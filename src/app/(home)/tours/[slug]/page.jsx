@@ -248,6 +248,10 @@ export default function TourDetailsPage() {
                           {schedule.available_seats} seats left
                         </span>
                       </div>
+                      <div className="flex items-center space-x-4 text-sm text-gray-500 border-t border-gray-100 pt-2">
+                        <span><strong className="text-gray-700">{schedule.booked_seats || 0}</strong> Booked</span>
+                        <span><strong className="text-gray-700">{schedule.reserved_seats || 0}</strong> Reserved (Pending)</span>
+                      </div>
                     </div>
                   );
                 })}

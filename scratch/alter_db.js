@@ -1,26 +1,39 @@
-require('dotenv').config({ path: '.env' });
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  user: process.env.PG_USER,
-  password: process.env.PG_PASSWORD,
-  host: process.env.PG_HOST,
-  port: process.env.PG_PORT,
-  database: process.env.PG_DATABASE,
-  ssl: { rejectUnauthorized: false }
-});
+import { dbQuery } from '../src/lib/db.js';
 
 async function main() {
   try {
-    await pool.query('ALTER TABLE tour_bookings ADD COLUMN IF NOT EXISTS phone TEXT;');
-    await pool.query('ALTER TABLE tour_bookings ADD COLUMN IF NOT EXISTS transaction_id TEXT;');
-    await pool.query('ALTER TABLE tour_bookings ADD COLUMN IF NOT EXISTS separate_room BOOLEAN DEFAULT false;');
-    console.log('Successfully altered tour_bookings table.');
-    process.exit(0);
-  } catch (error) {
-    console.error('Error altering table:', error);
-    process.exit(1);
+    await dbQuery('ALTER TABLE tour_schedules ADD COLUMN reserved_seats INT DEFAULT 0');
+    console.log('Added reserved_seats');
+  } catch (e) {
+    console.log(e.message);
   }
+  try {
+    await dbQuery('ALTER TABLE tour_schedules ADD COLUMN booked_seats INT DEFAULT 0');
+    console.log('Added booked_seats');
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  // Also update existing confirmed bookings to reflect in booked_seats
+  try {
+    await dbQuery(`
+      WITH booked AS (
+        SELECT schedule_id, SUM(seats) as total_booked
+        FROM tour_bookings
+        WHERE status = 'confirmed'
+        GROUP BY schedule_id
+      )
+      UPDATE tour_schedules ts
+      SET booked_seats = b.total_booked
+      FROM booked b
+      WHERE ts.schedule_id = b.schedule_id
+    `);
+    console.log('Updated booked_seats based on existing bookings');
+  } catch (e) {
+    console.log(e.message);
+  }
+
+  process.exit(0);
 }
 
 main();

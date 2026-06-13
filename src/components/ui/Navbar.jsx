@@ -34,7 +34,7 @@ export default function Navbar({ session }) {
   }, [dropdownRef]);
 
   return (
-    <nav className="fixed w-full z-50 top-0 inset-s-0 border-b border-gray-200 bg-white/80 h-14 backdrop-blur-md">
+    <nav className="fixed w-full z-50 top-0 inset-s-0 border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between  p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           {website?.logo_url && (

@@ -8,7 +8,7 @@ export default async function HomeLayout({ children }) {
   const session = await getServerSession();
 
   return (
-    <div className="min-h-screen flex flex-col pt-14">
+    <div className="min-h-screen flex flex-col pt-16">
       <Navbar session={session} />
       <Suspense fallback={null}>
         <Sidebar session={session} />

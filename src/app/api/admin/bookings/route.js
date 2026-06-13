@@ -62,30 +62,43 @@ export async function PUT(req) {
 
       // 2. Logic for confirming
       if (status === 'confirmed' && booking.status !== 'confirmed') {
-        // Check available seats
-        const scheduleRes = await client.query(
-          'SELECT available_seats FROM tour_schedules WHERE schedule_id = $1 FOR UPDATE',
-          [booking.schedule_id]
-        );
-        const availableSeats = scheduleRes.rows[0]?.available_seats || 0;
+        // Only deduct seats if moving from cancelled to confirmed, because pending already deducted seats
+        if (booking.status === 'cancelled') {
+          const scheduleRes = await client.query(
+            'SELECT available_seats FROM tour_schedules WHERE schedule_id = $1 FOR UPDATE',
+            [booking.schedule_id]
+          );
+          const availableSeats = scheduleRes.rows[0]?.available_seats || 0;
 
-        if (availableSeats < booking.seats) {
-          throw new Error('Not enough seats available to confirm this booking');
+          if (availableSeats < booking.seats) {
+            throw new Error('Not enough seats available to confirm this booking');
+          }
+
+          await client.query(
+            'UPDATE tour_schedules SET available_seats = available_seats - $1 WHERE schedule_id = $2',
+            [booking.seats, booking.schedule_id]
+          );
         }
 
-        // Deduct seats
+        // Complete the purchase and payment
         await client.query(
-          'UPDATE tour_schedules SET available_seats = available_seats - $1 WHERE schedule_id = $2',
-          [booking.seats, booking.schedule_id]
+          "UPDATE tour_payments SET status = 'success', paid_at = now() WHERE booking_id = $1",
+          [booking_id]
         );
       }
 
-      // 3. Logic for cancelling a confirmed booking
-      if (status === 'cancelled' && booking.status === 'confirmed') {
-        // Return seats
+      // 3. Logic for cancelling a confirmed or pending booking
+      if (status === 'cancelled' && booking.status !== 'cancelled') {
+        // Return seats (both pending and confirmed have seats deducted)
         await client.query(
           'UPDATE tour_schedules SET available_seats = available_seats + $1 WHERE schedule_id = $2',
           [booking.seats, booking.schedule_id]
+        );
+        
+        // Update payment to failed
+        await client.query(
+          "UPDATE tour_payments SET status = 'failed' WHERE booking_id = $1",
+          [booking_id]
         );
       }
 

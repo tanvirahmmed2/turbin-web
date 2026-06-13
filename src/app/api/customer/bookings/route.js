@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { dbQuery } from '@/lib/db';
+import { dbQuery, withTransaction } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 
 export async function GET(req) {
@@ -88,25 +88,41 @@ export async function POST(req) {
     const isSeparateRoomEligible = separate_room && seats >= 2;
     const total_price = (Number(base_price) * Number(seats)) + (isSeparateRoomEligible ? Number(separate_room_charge) : 0);
 
-    // 4. Insert booking
-    const bookingRes = await dbQuery(
-      `INSERT INTO tour_bookings 
-        (tenant_id, customer_id, tour_id, schedule_id, seats, total_price, phone, transaction_id, separate_room, status)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'confirmed') RETURNING booking_id`,
-      [tenant_id, customerId, tour_id, schedule_id, seats, total_price, phone, transaction_id, isSeparateRoomEligible]
-    );
+    return await withTransaction(async (client) => {
+      // 4. Double check and deduct seats
+      const currentScheduleRes = await client.query('SELECT available_seats FROM tour_schedules WHERE schedule_id = $1 FOR UPDATE', [schedule_id]);
+      if (currentScheduleRes.rows[0].available_seats < seats) {
+        throw new Error('Not enough seats available');
+      }
 
-    const bookingId = bookingRes.rows[0].booking_id;
+      await client.query(
+        'UPDATE tour_schedules SET available_seats = available_seats - $1 WHERE schedule_id = $2',
+        [seats, schedule_id]
+      );
 
-    // 5. Create payment record
-    await dbQuery(
-      `INSERT INTO tour_payments (booking_id, amount, provider, transaction_id, status, paid_at)
-       VALUES ($1, $2, $3, $4, 'success', now())`,
-      [bookingId, total_price, provider || 'stripe', transaction_id]
-    );
+      // 5. Insert booking
+      const bookingRes = await client.query(
+        `INSERT INTO tour_bookings 
+          (tenant_id, customer_id, tour_id, schedule_id, seats, total_price, phone, transaction_id, separate_room, status)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending') RETURNING booking_id`,
+        [tenant_id, customerId, tour_id, schedule_id, seats, total_price, phone, transaction_id, isSeparateRoomEligible]
+      );
 
-    return NextResponse.json({ success: true, booking_id: bookingId });
+      const bookingId = bookingRes.rows[0].booking_id;
+
+      // 6. Create payment record
+      await client.query(
+        `INSERT INTO tour_payments (booking_id, amount, provider, transaction_id, status)
+         VALUES ($1, $2, $3, $4, 'pending')`,
+        [bookingId, total_price, provider || 'stripe', transaction_id]
+      );
+
+      return NextResponse.json({ success: true, booking_id: bookingId });
+    });
   } catch (error) {
+    if (error.message === 'Not enough seats available') {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     console.error('Create Booking Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
