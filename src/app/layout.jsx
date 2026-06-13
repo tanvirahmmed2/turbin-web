@@ -5,7 +5,7 @@ import { AppProvider } from '@/components/helper/Context';
 
 const inter = Inter({ subsets: ['latin'] });
 
-import { getTenantId } from '@/lib/tenant';
+import { getTenantId, getTenantStatus } from '@/lib/tenant';
 import { dbQuery } from '@/lib/db';
 
 export async function generateMetadata() {
@@ -33,7 +33,33 @@ export async function generateMetadata() {
   };
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const { tenant_status, subscription_status } = await getTenantStatus();
+
+  // Enforce strict access control: no bypasses
+  if (tenant_status !== 'active' || (subscription_status !== 'active' && subscription_status !== 'trial')) {
+    return (
+      <html lang="en">
+        <body className={`${inter.className} bg-gray-50 text-gray-900 antialiased min-h-screen flex items-center justify-center p-4`}>
+          <div className="bg-white max-w-md w-full rounded-3xl p-10 text-center shadow-2xl border border-gray-100">
+            <div className="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Service Unavailable</h1>
+            <p className="text-gray-500 mb-6">
+              {tenant_status !== 'active' 
+                ? `This website is currently ${tenant_status}.` 
+                : `This website's subscription is ${subscription_status}.`}
+            </p>
+            <div className="text-sm text-gray-400">
+              Please contact support or the website administrator to restore access.
+            </div>
+          </div>
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white text-gray-900 antialiased`}>

@@ -408,9 +408,6 @@ CREATE TABLE tour_reviews (
   customer_id INT
     REFERENCES tour_customers(customer_id),
 
-  tour_id INT
-    REFERENCES tour_tours(tour_id),
-
   rating INT CHECK (
     rating BETWEEN 1 AND 5
   ),
