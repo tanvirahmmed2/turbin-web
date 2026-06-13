@@ -7,6 +7,9 @@ import { toast } from 'react-hot-toast';
 export default function ManageContacts() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [replyingTo, setReplyingTo] = useState(null); // stores contact object
+  const [replyMessage, setReplyMessage] = useState('');
+  const [sendingReply, setSendingReply] = useState(false);
 
   useEffect(() => {
     fetchContacts();
@@ -33,6 +36,38 @@ export default function ManageContacts() {
       console.error('Failed to update status', err);
       toast.error('Failed to update status');
     }
+  };
+
+  const handleReply = async () => {
+    if (!replyMessage.trim()) {
+      toast.error('Reply message cannot be empty');
+      return;
+    }
+    setSendingReply(true);
+    try {
+      await axios.post('/api/admin/contacts/reply', {
+        contact_id: replyingTo.contact_id,
+        message: replyMessage
+      });
+      toast.success('Reply sent successfully');
+      setContacts(contacts.map(c => c.contact_id === replyingTo.contact_id ? { ...c, status: 'replied' } : c));
+      closeReplyModal();
+    } catch (err) {
+      console.error('Failed to send reply', err);
+      toast.error('Failed to send reply');
+    } finally {
+      setSendingReply(false);
+    }
+  };
+
+  const openReplyModal = (contact) => {
+    setReplyingTo(contact);
+    setReplyMessage('');
+  };
+
+  const closeReplyModal = () => {
+    setReplyingTo(null);
+    setReplyMessage('');
   };
 
   if (loading) return <div className="text-center p-12 text-gray-500">Loading contact forms...</div>;
@@ -66,15 +101,23 @@ export default function ManageContacts() {
               <span className="text-xs text-gray-500">
                 {new Date(contact.created_at).toLocaleDateString()}
               </span>
-              <select 
-                value={contact.status}
-                onChange={(e) => updateStatus(contact.contact_id, e.target.value)}
-                className="border border-gray-200 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 bg-white"
-              >
-                <option value="unread">Unread</option>
-                <option value="read">Read</option>
-                <option value="replied">Replied</option>
-              </select>
+              <div className="flex space-x-2">
+                <select 
+                  value={contact.status}
+                  onChange={(e) => updateStatus(contact.contact_id, e.target.value)}
+                  className="border border-gray-200 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 bg-white"
+                >
+                  <option value="unread">Unread</option>
+                  <option value="read">Read</option>
+                  <option value="replied">Replied</option>
+                </select>
+                <button
+                  onClick={() => openReplyModal(contact)}
+                  className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Reply
+                </button>
+              </div>
             </div>
           </div>
         )) : (
@@ -83,6 +126,41 @@ export default function ManageContacts() {
           </div>
         )}
       </div>
+
+      {/* Reply Modal */}
+      {replyingTo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl relative">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Reply to {replyingTo.name}</h3>
+            <p className="text-sm text-gray-500 mb-6">Subject: {replyingTo.subject}</p>
+            
+            <textarea
+              rows="6"
+              className="w-full p-4 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none mb-6"
+              placeholder="Type your reply here..."
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+            ></textarea>
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={closeReplyModal}
+                disabled={sendingReply}
+                className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReply}
+                disabled={sendingReply || !replyMessage.trim()}
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors disabled:opacity-50"
+              >
+                {sendingReply ? 'Sending...' : 'Send Email'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -254,6 +254,8 @@ CREATE TABLE tour_users (
   reset_password_token TEXT,
   reset_password_expires TIMESTAMP,
 
+  is_banned BOOLEAN DEFAULT FALSE,
+
   created_at TIMESTAMP DEFAULT now()
 );
 

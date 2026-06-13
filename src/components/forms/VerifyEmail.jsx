@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
@@ -14,12 +14,17 @@ export default function VerifyEmail() {
   const [status, setStatus] = useState('loading'); // 'loading', 'success', 'error'
   const [message, setMessage] = useState('Verifying your email address...');
 
+  const hasFired = useRef(false);
+
   useEffect(() => {
     if (!token) {
       setStatus('error');
       setMessage('Invalid or missing verification token.');
       return;
     }
+
+    if (hasFired.current) return;
+    hasFired.current = true;
 
     const verifyToken = async () => {
       try {

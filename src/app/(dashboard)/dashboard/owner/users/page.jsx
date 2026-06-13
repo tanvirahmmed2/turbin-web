@@ -38,6 +38,18 @@ export default function ManageUsers() {
     }
   };
 
+  const handleBanToggle = async (userId, currentBanStatus) => {
+    try {
+      await axios.patch('/api/admin/users', { user_id: userId, is_banned: !currentBanStatus });
+      setUsers(users.map(u => u.user_id === userId ? { ...u, is_banned: !currentBanStatus } : u));
+      alert(`User successfully ${!currentBanStatus ? 'banned' : 'unbanned'}`);
+    } catch (err) {
+      console.error('Failed to update ban status', err);
+      alert('Failed to update ban status');
+    }
+  };
+
+
   const filteredUsers = users.filter(user => 
     user.email.toLowerCase().includes(searchEmail.toLowerCase())
   );
@@ -71,6 +83,7 @@ export default function ManageUsers() {
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Joined Date</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -102,13 +115,30 @@ export default function ManageUsers() {
                       <option value="customer" className="text-gray-900">Customer</option>
                     </select>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap space-x-2">
                     <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.is_verified ? 'bg-green-900/50 text-green-400' : 'bg-red-900/50 text-red-400'}`}>
                       {user.is_verified ? 'Verified' : 'Unverified'}
                     </span>
+                    {user.is_banned && (
+                      <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-900/50 text-red-400">
+                        Banned
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {new Date(user.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => handleBanToggle(user.user_id, user.is_banned)}
+                      className={`px-3 py-1 rounded-md text-xs font-semibold transition-colors ${
+                        user.is_banned
+                          ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-red-100 text-red-700 hover:bg-red-200'
+                      }`}
+                    >
+                      {user.is_banned ? 'Unban User' : 'Ban User'}
+                    </button>
                   </td>
                 </tr>
               ))}

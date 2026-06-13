@@ -35,6 +35,10 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Please verify your account before logging in. Check your email for the verification link.' }, { status: 403 });
     }
 
+    if (user.is_banned) {
+      return NextResponse.json({ error: 'Your account has been banned. Please contact support.' }, { status: 403 });
+    }
+
     const token = signToken({
       user_id: user.user_id,
       tenant_id: tenantId,

@@ -14,7 +14,7 @@ export async function POST(req) {
 
     // Find the user with this token
     const result = await dbQuery(
-      `SELECT user_id, verification_token_expires 
+      `SELECT user_id, is_verified, verification_token_expires 
        FROM tour_users 
        WHERE verification_token = $1 AND tenant_id = $2`,
       [token, tenantId]
@@ -26,17 +26,20 @@ export async function POST(req) {
 
     const user = result.rows[0];
 
+    // Check if already verified
+    if (user.is_verified) {
+      return NextResponse.json({ success: true, message: 'Account is already verified' });
+    }
+
     // Check expiration
     if (new Date() > new Date(user.verification_token_expires)) {
       return NextResponse.json({ error: 'Verification token has expired' }, { status: 400 });
     }
 
-    // Update user to verified and clear tokens
+    // Update user to verified
     await dbQuery(
       `UPDATE tour_users 
-       SET is_verified = TRUE, 
-           verification_token = NULL, 
-           verification_token_expires = NULL 
+       SET is_verified = TRUE 
        WHERE user_id = $1`,
       [user.user_id]
     );

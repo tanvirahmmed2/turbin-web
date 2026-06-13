@@ -22,7 +22,7 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
 
-    let query = 'SELECT user_id, name, email, role, is_verified, created_at FROM tour_users WHERE tenant_id = $1';
+    let query = 'SELECT user_id, name, email, role, is_verified, is_banned, created_at FROM tour_users WHERE tenant_id = $1';
     
     if (type === 'team') {
       query += ` AND role IN ('owner', 'manager', 'staff', 'guide', 'support')`;
@@ -54,23 +54,31 @@ export async function PATCH(req) {
 
     const tenantId = await getTenantId();
     const body = await req.json();
-    const { user_id, new_role } = body;
+    const { user_id, new_role, is_banned } = body;
 
-    if (!user_id || !new_role) {
-      return NextResponse.json({ error: 'Missing user_id or new_role' }, { status: 400 });
+    if (!user_id) {
+      return NextResponse.json({ error: 'Missing user_id' }, { status: 400 });
     }
 
-    const allowedRoles = ['owner', 'manager', 'staff', 'guide', 'support', 'customer'];
-    if (!allowedRoles.includes(new_role)) {
-      return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+    if (new_role !== undefined) {
+      const allowedRoles = ['owner', 'manager', 'staff', 'guide', 'support', 'customer'];
+      if (!allowedRoles.includes(new_role)) {
+        return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+      }
+      await dbQuery(
+        'UPDATE tour_users SET role = $1 WHERE user_id = $2 AND tenant_id = $3',
+        [new_role, user_id, tenantId]
+      );
     }
 
-    await dbQuery(
-      'UPDATE tour_users SET role = $1 WHERE user_id = $2 AND tenant_id = $3',
-      [new_role, user_id, tenantId]
-    );
+    if (is_banned !== undefined) {
+      await dbQuery(
+        'UPDATE tour_users SET is_banned = $1 WHERE user_id = $2 AND tenant_id = $3',
+        [is_banned, user_id, tenantId]
+      );
+    }
 
-    return NextResponse.json({ message: 'Role updated successfully' });
+    return NextResponse.json({ message: 'User updated successfully' });
   } catch (error) {
     console.error('Update Role Error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
