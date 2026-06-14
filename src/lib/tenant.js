@@ -46,6 +46,12 @@ export const getTenantStatus = async () => {
         // If there's no subscription record, it's 'none' (which implies not active)
         subscription_status: result.rows[0].subscription_status || 'none',
       };
+    } else {
+      return {
+        tenant_id: null,
+        tenant_status: 'not_found',
+        subscription_status: 'none',
+      };
     }
   } catch (error) {
     // If DB fails, fallback
