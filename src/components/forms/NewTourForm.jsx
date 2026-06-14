@@ -20,6 +20,7 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
 
   const [spots, setSpots] = useState(initialData?.spots || []);
   const [features, setFeatures] = useState(initialData?.features || []);
+  const [guides, setGuides] = useState(initialData?.guides || []);
   const [schedules, setSchedules] = useState(initialData?.schedules?.map(s => ({
     ...s,
     tour_date: s.tour_date ? new Date(s.tour_date).toISOString().split('T')[0] : '',
@@ -27,15 +28,18 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
   })) || []);
   const [availableSpots, setAvailableSpots] = useState([]);
   const [availableFeatures, setAvailableFeatures] = useState([]);
+  const [availableGuides, setAvailableGuides] = useState([]);
 
   const fetchData = async () => {
     try {
-      const [spotsRes, featuresRes] = await Promise.all([
+      const [spotsRes, featuresRes, guidesRes] = await Promise.all([
         axios.get('/api/admin/spots'),
-        axios.get('/api/admin/features')
+        axios.get('/api/admin/features'),
+        axios.get('/api/admin/users?role=guide')
       ]);
       setAvailableSpots(spotsRes.data.spots || []);
       setAvailableFeatures(featuresRes.data.features || []);
+      setAvailableGuides(guidesRes.data.users || []);
     } catch (err) {
       console.error('Failed to load initial data', err);
     }
@@ -87,6 +91,23 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
     setFeatures(updatedFeatures);
   };
 
+  const handleGuideSelect = (e) => {
+    const guideId = e.target.value;
+    if (!guideId) return;
+    
+    const guideToAdd = availableGuides.find((g) => g.user_id == guideId);
+    if (guideToAdd && !guides.find((g) => g.user_id == guideId)) {
+      setGuides([...guides, guideToAdd]);
+    }
+    e.target.value = "";
+  };
+
+  const removeGuide = (index) => {
+    const updatedGuides = [...guides];
+    updatedGuides.splice(index, 1);
+    setGuides(updatedGuides);
+  };
+
   const addSchedule = () => {
     setSchedules([...schedules, { tour_date: '', start_time: '', end_time: '', last_registration_date: '', max_seats: '' }]);
   };
@@ -105,7 +126,7 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ ...formData, spots, features, schedules });
+    onSubmit({ ...formData, spots, features, schedules, guides });
   };
 
   return (
@@ -311,6 +332,43 @@ export default function TourForm({ initialData = null, onSubmit, loading = false
                   type="button"
                   onClick={() => removeFeature(index)}
                   className="text-blue-400 hover:text-blue-600 focus:outline-none"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="p-8 rounded-3xl border border-gray-200 bg-white">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Assigned Guides</h2>
+          <select
+            onChange={handleGuideSelect}
+            className="px-4 py-2 bg-white text-gray-900 rounded-lg text-sm font-medium transition-colors border border-gray-200 focus:outline-none focus:border-blue-500"
+            defaultValue=""
+          >
+            <option value="" disabled>+ Assign Guide</option>
+            {availableGuides.map((guide) => (
+              <option key={guide.user_id} value={guide.user_id} disabled={guides.some(g => g.user_id === guide.user_id)}>
+                {guide.name} {guides.some(g => g.user_id === guide.user_id) ? '(Assigned)' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {guides.length === 0 ? (
+          <p className="text-gray-500 text-center py-6">No guides assigned yet. Select a guide from the dropdown above to assign them.</p>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {guides.map((guide, index) => (
+              <div key={index} className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-800 rounded-lg border border-green-100">
+                <span className="font-medium text-sm">{guide.name}</span>
+                <button
+                  type="button"
+                  onClick={() => removeGuide(index)}
+                  className="text-green-400 hover:text-green-600 focus:outline-none"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>

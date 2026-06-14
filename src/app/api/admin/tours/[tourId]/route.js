@@ -49,12 +49,21 @@ export async function GET(req, { params }) {
       [tourId]
     );
 
+    const guidesRes = await dbQuery(
+      `SELECT u.user_id, u.name 
+       FROM tour_users u
+       JOIN tour_assigned_guides ag ON u.user_id = ag.guide_id
+       WHERE ag.tour_id = $1`,
+      [tourId]
+    );
+
     return NextResponse.json({ 
       tour: {
         ...tourRes.rows[0],
         schedules: schedulesRes.rows,
         spots: spotsRes.rows,
-        features: featuresRes.rows
+        features: featuresRes.rows,
+        guides: guidesRes.rows
       }
     });
   } catch (error) {
@@ -73,7 +82,7 @@ export async function PUT(req, { params }) {
     const tenantId = session.tenant_id;
     const { tourId } = await params;
     const body = await req.json();
-    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, status, spots = [], features = [], schedules = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, status, spots = [], features = [], schedules = [], guides = [] } = body;
 
     const slug = title ? slugify(title, { lower: true, strict: true }) : '';
 
@@ -163,6 +172,23 @@ export async function PUT(req, { params }) {
              VALUES ($1, $2, $3, $4, $5, $6, $7)`,
             [tourId, schedule.tour_date, schedule.start_time || null, schedule.end_time || null, schedule.last_registration_date, schedule.max_seats, schedule.max_seats]
           );
+        }
+      }
+
+      // 6. Sync guides
+      await client.query(
+        `DELETE FROM tour_assigned_guides WHERE tour_id = $1`,
+        [tourId]
+      );
+
+      if (guides && guides.length > 0) {
+        for (const guide of guides) {
+          if (guide.user_id) {
+            await client.query(
+              `INSERT INTO tour_assigned_guides (tour_id, guide_id) VALUES ($1, $2)`,
+              [tourId, guide.user_id]
+            );
+          }
         }
       }
     });

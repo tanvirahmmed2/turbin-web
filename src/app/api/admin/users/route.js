@@ -21,16 +21,21 @@ export async function GET(req) {
     // Parse URL params
     const { searchParams } = new URL(req.url);
     const type = searchParams.get('type');
+    const role = searchParams.get('role');
 
     let query = 'SELECT user_id, name, email, role, is_verified, is_banned, created_at FROM tour_users WHERE tenant_id = $1';
+    let queryParams = [tenantId];
     
     if (type === 'team') {
       query += ` AND role IN ('owner', 'manager', 'guide', 'support')`;
+    } else if (role) {
+      query += ` AND role = $2`;
+      queryParams.push(role);
     }
 
     query += ' ORDER BY created_at DESC';
 
-    const result = await dbQuery(query, [tenantId]);
+    const result = await dbQuery(query, queryParams);
 
     return NextResponse.json({ users: result.rows });
   } catch (error) {

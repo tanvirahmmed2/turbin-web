@@ -591,3 +591,14 @@ CREATE TABLE tour_tour_features (
   feature_id INT REFERENCES tour_features(feature_id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT now()
 );
+
+-- =====================================================
+-- TOUR ASSIGNED GUIDES (Junction)
+-- =====================================================
+
+CREATE TABLE tour_assigned_guides (
+  id SERIAL PRIMARY KEY,
+  tour_id INT REFERENCES tour_tours(tour_id) ON DELETE CASCADE,
+  guide_id INT REFERENCES tour_users(user_id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT now()
+);

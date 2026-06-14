@@ -40,7 +40,7 @@ export async function POST(req) {
 
     const tenantId = session.tenant_id;
     const body = await req.json();
-    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, spots = [], features = [], schedules = [] } = body;
+    const { title, description, duration, starting_location, finish_location, base_price, separate_room_available = false, separate_room_charge = 0.00, spots = [], features = [], schedules = [], guides = [] } = body;
 
     const slug = title ? slugify(title, { lower: true, strict: true }) : '';
 
@@ -102,6 +102,18 @@ export async function POST(req) {
               schedule.max_seats // Set available to max by default
             ]
           );
+        }
+      }
+      
+      // 5. Insert guides
+      if (guides && guides.length > 0) {
+        for (const guide of guides) {
+          if (guide.user_id) {
+            await client.query(
+              `INSERT INTO tour_assigned_guides (tour_id, guide_id) VALUES ($1, $2)`,
+              [newTourId, guide.user_id]
+            );
+          }
         }
       }
       
