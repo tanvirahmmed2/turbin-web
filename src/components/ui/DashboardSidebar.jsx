@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAppContext } from '@/components/helper/Context';
+import Image from 'next/image';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -60,12 +61,7 @@ export default function DashboardSidebar() {
       );
     }
 
-    if (role === 'staff') {
-      baseLinks.push(
-        { href: '/dashboard/staff', label: 'Staff Portal', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
-        { href: '/dashboard/staff/task', label: 'My Tasks', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' }
-      );
-    }
+
 
     if (role === 'guide') {
       baseLinks.push(
@@ -115,9 +111,9 @@ export default function DashboardSidebar() {
           <div>
             <Link href="/" className="flex items-center gap-2 text-2xl font-black tracking-tight" style={{ color: website?.theme_color || '#3b82f6' }}>
               {website?.logo_url ? (
-                <img src={website.logo_url} alt="Logo" className="h-8 w-auto object-contain" />
+                <Image width={100} height={100} src={website.logo_url} alt="Logo" className="h-8 w-auto object-contain" />
               ) : null}
-              <span>{website?.name || website?.hero_title || 'TourBooking'}</span>
+              <span>{website?.hero_title}</span>
             </Link>
             <div className="mt-1 text-xs text-gray-500 font-medium uppercase tracking-wider">Admin Dashboard</div>
           </div>

@@ -79,7 +79,7 @@ export default function OwnerAnalytics() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    ${booking.total_price}
+                    ৳{booking.total_price}
                   </td>
                 </tr>
               ))}

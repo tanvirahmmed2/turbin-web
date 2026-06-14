@@ -70,7 +70,7 @@ export default function ManageBookings() {
                     <div className="text-xs text-gray-500 font-mono mt-1">TXN: {booking.transaction_id || 'N/A'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900">${booking.total_price}</div>
+                    <div className="text-sm font-bold text-gray-900">৳{booking.total_price}</div>
                     {booking.separate_room && (
                       <span className="inline-block mt-1 px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded">
                         + SEP. ROOM

@@ -66,7 +66,7 @@ export default function ManagerDashboard() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900">${activity.total_price}</p>
+                  <p className="font-bold text-gray-900">৳{activity.total_price}</p>
                   <span className={`text-xs px-2 py-1 rounded-full ${activity.status === 'confirmed' ? 'bg-green-900/50 text-green-400' : 'bg-yellow-900/50 text-yellow-400'}`}>
                     {activity.status}
                   </span>

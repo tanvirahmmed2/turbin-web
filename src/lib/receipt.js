@@ -237,7 +237,7 @@ export const downloadReceipt = (ticket, website) => {
                   ${ticket.seats}
                 </td>
                 <td class="right" style="font-size: 16px;">
-                  $${ticket.total_price}
+                  ৳${ticket.total_price}
                 </td>
               </tr>
             </tbody>
@@ -246,11 +246,11 @@ export const downloadReceipt = (ticket, website) => {
           <div class="totals">
             <div class="total-row">
               <span>Subtotal</span>
-              <span>$${ticket.total_price}</span>
+              <span>৳${ticket.total_price}</span>
             </div>
             <div class="total-row grand">
               <span>Total Bill</span>
-              <span>$${ticket.total_price}</span>
+              <span>৳${ticket.total_price}</span>
             </div>
           </div>
 

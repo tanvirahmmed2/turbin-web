@@ -40,9 +40,9 @@ export async function GET(req, { params }) {
 
     // Fetch replies
     const repliesResult = await dbQuery(
-      `SELECT r.reply_id, r.message, r.is_staff, r.created_at, u.name as staff_name, u.role as staff_role
+      `SELECT r.reply_id, r.message, r.is_support, r.created_at, u.name as support_name, u.role as support_role
        FROM tour_support_replies r
-       LEFT JOIN tour_users u ON r.staff_id = u.user_id
+       LEFT JOIN tour_users u ON r.support_id = u.user_id
        WHERE r.ticket_id = $1
        ORDER BY r.created_at ASC`,
       [ticket_id]
@@ -94,8 +94,8 @@ export async function POST(req, { params }) {
 
     // Insert reply
     const result = await dbQuery(
-      `INSERT INTO tour_support_replies (ticket_id, staff_id, is_staff, message) 
-       VALUES ($1, NULL, FALSE, $2) RETURNING reply_id, message, is_staff, created_at`,
+      `INSERT INTO tour_support_replies (ticket_id, support_id, is_support, message) 
+       VALUES ($1, NULL, FALSE, $2) RETURNING reply_id, message, is_support, created_at`,
       [ticket_id, message]
     );
 
@@ -116,8 +116,8 @@ export async function POST(req, { params }) {
 
     const newReply = {
       ...result.rows[0],
-      staff_name: null,
-      staff_role: null
+      support_name: null,
+      support_role: null
     };
 
     return NextResponse.json({ success: true, reply: newReply });

@@ -28,10 +28,10 @@ export default function ManageTeam() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Team Management</h1>
-          <p className="mt-1 text-gray-600">Manage your internal staff, guides, managers, and support team.</p>
+          <p className="mt-1 text-gray-600">Manage your internal guides, managers, and support team.</p>
         </div>
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium transition-colors">
-          + Add Staff
+          + Add Member
         </button>
       </div>
 

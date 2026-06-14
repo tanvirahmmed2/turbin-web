@@ -6,7 +6,7 @@ import slugify from 'slugify';
 export async function GET(req) {
   try {
     const session = getSession(req);
-    if (!session || !['owner', 'manager', 'staff', 'guide'].includes(session.role)) {
+    if (!session || !['owner', 'manager', 'guide'].includes(session.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

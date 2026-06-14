@@ -78,7 +78,7 @@ export default function CustomerBookings() {
                     <div className="text-sm text-gray-900">{booking.seats} Seat{booking.seats > 1 ? 's' : ''}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-bold text-gray-900">${booking.total_price}</div>
+                    <div className="text-sm font-bold text-gray-900">৳{booking.total_price}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' : booking.status === 'cancelled' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}>

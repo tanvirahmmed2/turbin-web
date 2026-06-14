@@ -41,19 +41,7 @@ export async function isManager(req) {
     }
 }
 
-export async function isStaff(req) {
-    try {
-        const { session, error } = await isLoggedIn(req);
-        if (error) return { error };
 
-        if (session.role !== 'staff') {
-            return { error: NextResponse.json({ error: 'Forbidden. Staff access required.' }, { status: 403 }) };
-        }
-        return { session };
-    } catch (error) {
-        return { error: NextResponse.json({ error: 'Internal server error' }, { status: 500 }) };
-    }
-}
 
 export async function isGuide(req) {
     try {
@@ -88,7 +76,7 @@ export async function isManagement(req) {
         const { session, error } = await isLoggedIn(req);
         if (error) return { error };
 
-        const managementRoles = ['owner', 'manager', 'staff', 'guide', 'support'];
+        const managementRoles = ['owner', 'manager', 'guide', 'support'];
         if (!managementRoles.includes(session.role)) {
             return { error: NextResponse.json({ error: 'Forbidden. Management access required.' }, { status: 403 }) };
         }

@@ -105,11 +105,11 @@ export default function ManageUsers() {
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.user_id, e.target.value)}
                       disabled={updatingRole === user.user_id}
-                      className={`px-3 py-1 pr-8 text-xs leading-5 font-semibold rounded-full capitalize border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 cursor-pointer outline-none ${ ['owner', 'manager'].includes(user.role) ? 'bg-purple-100 text-purple-700' : ['staff', 'guide', 'support'].includes(user.role) ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700' }`}
+                      className={`px-3 py-1 pr-8 text-xs leading-5 font-semibold rounded-full capitalize border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 cursor-pointer outline-none ${ ['owner', 'manager'].includes(user.role) ? 'bg-purple-100 text-purple-700' : ['guide', 'support'].includes(user.role) ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700' }`}
                     >
                       <option value="owner" className="text-gray-900">Owner</option>
                       <option value="manager" className="text-gray-900">Manager</option>
-                      <option value="staff" className="text-gray-900">Staff</option>
+
                       <option value="guide" className="text-gray-900">Guide</option>
                       <option value="support" className="text-gray-900">Support</option>
                       <option value="customer" className="text-gray-900">Customer</option>

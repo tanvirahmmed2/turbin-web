@@ -5,7 +5,7 @@ import { getSession } from '@/lib/auth';
 export async function GET(req) {
   try {
     const session = getSession(req);
-    if (!session || !['owner', 'manager', 'staff'].includes(session.role)) {
+    if (!session || !['owner', 'manager'].includes(session.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -32,7 +32,7 @@ export async function GET(req) {
 export async function PUT(req) {
   try {
     const session = getSession(req);
-    if (!session || !['owner', 'manager', 'staff'].includes(session.role)) {
+    if (!session || !['owner', 'manager'].includes(session.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

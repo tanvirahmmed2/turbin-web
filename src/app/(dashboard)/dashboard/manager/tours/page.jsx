@@ -78,7 +78,7 @@ export default function ManageTours() {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    ${tour.base_price}
+                    ৳{tour.base_price}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${tour.status === 'active' ? 'bg-green-900/50 text-green-400' : ' text-gray-400'}`}>

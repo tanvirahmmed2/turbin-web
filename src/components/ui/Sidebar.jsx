@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useAppContext } from '@/components/helper/Context';
+import Image from 'next/image';
 
 export default function Sidebar({ session }) {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ export default function Sidebar({ session }) {
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-3" onClick={onClose}>
             {website?.logo_url && (
-              <img src={website.logo_url} alt={website?.hero_title || 'TourApp'} className="h-8 rounded-md" />
+              <Image width={100} height={100} src={website.logo_url} alt={website?.hero_title} className="h-8 rounded-md" />
             )}
             <span className="self-center text-2xl font-extrabold whitespace-nowrap text-gray-900">
               {website?.hero_title || 'TourApp'}

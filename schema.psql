@@ -67,7 +67,6 @@ CREATE TABLE ts_packages (
 
   max_tours INT,
   max_bookings_per_month INT,
-  max_staff INT,
 
   is_active BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT now()
@@ -236,12 +235,11 @@ CREATE TABLE tour_users (
   email TEXT NOT NULL,
   password TEXT NOT NULL,
 
-  role TEXT DEFAULT 'staff'
+  role TEXT DEFAULT 'customer'
     CHECK (
       role IN (
         'owner',
         'manager',
-        'staff',
         'guide',
         'support',
         'customer'
@@ -535,11 +533,11 @@ CREATE TABLE tour_support_replies (
     REFERENCES tour_support_tickets(ticket_id)
     ON DELETE CASCADE,
 
-  staff_id INT
+  support_id INT
     REFERENCES tour_users(user_id)
     ON DELETE SET NULL,
 
-  is_staff BOOLEAN DEFAULT FALSE,
+  is_support BOOLEAN DEFAULT FALSE,
 
   message TEXT NOT NULL,
 

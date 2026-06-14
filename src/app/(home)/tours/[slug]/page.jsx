@@ -153,11 +153,11 @@ export default function TourDetailsPage() {
               <div>
                 <span className="block text-sm text-gray-500">Starting from</span>
                 <span className="text-3xl font-bold text-gray-900">
-                  ${tour.base_price}
+                  ৳{tour.base_price}
                 </span>
                 {tour.separate_room_available && (
                   <div className="mt-2 text-sm font-medium text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded-md border border-blue-100">
-                    + ${tour.separate_room_charge} for Separate Room
+                    + ৳{tour.separate_room_charge} for Separate Room
                   </div>
                 )}
               </div>
@@ -342,7 +342,7 @@ export default function TourDetailsPage() {
                         className="w-5 h-5 text-blue-600 rounded border-gray-300"
                       />
                       <label htmlFor="sepRoom" className="text-sm font-medium text-gray-900 cursor-pointer">
-                        Add separate room (+${tour.separate_room_charge})
+                        Add separate room (+৳{tour.separate_room_charge})
                       </label>
                     </div>
                   )}
@@ -359,7 +359,7 @@ export default function TourDetailsPage() {
                   <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                     <div>
                       <div className="text-sm text-gray-500 font-medium">Total Amount</div>
-                      <div className="text-3xl font-bold text-gray-900">${calculateTotal()}</div>
+                      <div className="text-3xl font-bold text-gray-900">৳{calculateTotal()}</div>
                     </div>
                     <button 
                       type="submit" disabled={bookingLoading}

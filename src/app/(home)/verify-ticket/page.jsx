@@ -116,7 +116,7 @@ export default function VerifyTicket() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 uppercase font-semibold">Total Price</p>
-                    <p className="text-sm font-bold text-blue-600 mt-1">${ticket.total_price}</p>
+                    <p className="text-sm font-bold text-blue-600 mt-1">৳{ticket.total_price}</p>
                   </div>
                 </div>
               </div>

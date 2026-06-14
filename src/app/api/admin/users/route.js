@@ -25,7 +25,7 @@ export async function GET(req) {
     let query = 'SELECT user_id, name, email, role, is_verified, is_banned, created_at FROM tour_users WHERE tenant_id = $1';
     
     if (type === 'team') {
-      query += ` AND role IN ('owner', 'manager', 'staff', 'guide', 'support')`;
+      query += ` AND role IN ('owner', 'manager', 'guide', 'support')`;
     }
 
     query += ' ORDER BY created_at DESC';
@@ -61,7 +61,7 @@ export async function PATCH(req) {
     }
 
     if (new_role !== undefined) {
-      const allowedRoles = ['owner', 'manager', 'staff', 'guide', 'support', 'customer'];
+      const allowedRoles = ['owner', 'manager', 'guide', 'support', 'customer'];
       if (!allowedRoles.includes(new_role)) {
         return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
       }

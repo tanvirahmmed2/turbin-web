@@ -124,7 +124,7 @@ export default function DashboardPage() {
                       {new Date(booking.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 font-medium">
-                      ${parseFloat(booking.total_price || 0).toFixed(2)}
+                      ৳{parseFloat(booking.total_price || 0).toFixed(2)}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${ booking.status === 'confirmed' ? 'bg-green-100 text-green-800 ' : booking.status === 'cancelled' ? 'bg-red-100 text-red-800 ' : 'bg-yellow-100 text-yellow-800 ' }`}>
